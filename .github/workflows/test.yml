@@ -13,3 +13,7 @@ jobs:
         run: npm ci
       - name: Run test
         run: npm run test
+      # ISSUE: If use below command, you have to start local server on Github Actions.
+      # TODO: Enable below command
+      # - name: Run E2E test
+      #   run: npm run cypress:ci

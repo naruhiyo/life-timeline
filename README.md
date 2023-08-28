@@ -1,4 +1,5 @@
 # life-timeline
+
 ## Getting Started
 
 1. Create network
@@ -42,5 +43,6 @@ $ docker compose down
 ```
 
 ## For Developpers
+
 - Node.js: 18.16.0
 - npm: 9.8.1
