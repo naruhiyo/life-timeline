@@ -1,4 +1,4 @@
-import { SampleLogic } from 'api/SampleLogic'
+import { SampleLogic } from '@/api/SampleLogic'
 
 describe('SampleLogic Test', () => {
   describe('say hello', () => {
