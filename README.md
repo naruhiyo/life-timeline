@@ -1,13 +1,25 @@
 # life-timeline
 ## Getting Started
 
-1. Run the development server
+1. Create network
 
-```consle
-$ npm run dev
+```console
+$ docker network create lifetimeline_default
 ```
 
-2. Open [http://localhost:3000](http://localhost:3000)
+2. Build docker image
+
+```console
+$ docker compose build
+```
+
+3. Run the development server
+
+```consle
+$ docker compose up
+```
+
+4. Open [http://localhost:3000](http://localhost:3000)
 
 ## For Developpers
 - Node.js: 18.16.0
