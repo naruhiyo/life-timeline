@@ -1,7 +1,7 @@
 name: reviewdog
 on: [pull_request]
 jobs:
-  build:
+  npm-run-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
