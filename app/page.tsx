@@ -1,11 +1,39 @@
+"use client";
 import styles from '@/components/page.module.css'
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
+import SchoolIcon from '@mui/icons-material/School';
+import WorkIcon from '@mui/icons-material/Work';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>Hello World</p>
-      </div>
+      <VerticalTimeline>
+        <VerticalTimelineElement
+          className="vertical-timeline-element--education"
+          contentStyle={{ background: 'rgb(214, 239, 255)', color: '#222' }}
+          contentArrowStyle={{ borderRight: '7px solid  rgb(214, 239, 255)' }}
+          date="2019.3"
+          iconStyle={{ background: 'rgb(214, 239, 255)', color: '#222' }}
+          icon={<SchoolIcon />}
+         >
+          <h3 className="vertical-timeline-element-title">ほげ大学院修了</h3>
+          <h4 className="vertical-timeline-element-subtitle">ふが専攻</h4>
+          <p>ぴよぴよ</p>
+        </VerticalTimelineElement>
+        <VerticalTimelineElement
+          className="vertical-timeline-element--work"
+          contentStyle={{ background: 'rgb(148, 193, 255)', color: '#222' }}
+          contentArrowStyle={{ borderRight: '7px solid  rgb(148, 193, 255)' }}
+          date="2019.4 -"
+          iconStyle={{ background: 'rgb(148, 193, 255)', color: '#222' }}
+          icon={<WorkIcon />}
+        >
+          <h3 className="vertical-timeline-element-title">XXX 就職</h3>
+          <h4 className="vertical-timeline-element-subtitle">XXX 配属</h4>
+          <p>ほげほげ</p>
+        </VerticalTimelineElement>
+      </VerticalTimeline>
     </main>
   )
 }
