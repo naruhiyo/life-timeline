@@ -1,13 +1,18 @@
 "use client";
-import styles from '@/components/page.module.css'
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
+import {Button} from '@nextui-org/button';
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import styles from '@/components/page.module.css'
+
 
 export default function Home() {
   return (
     <main className={styles.main}>
+    <div>
+      <Button>Click me</Button>
+    </div>
       <VerticalTimeline>
         <VerticalTimelineElement
           className="vertical-timeline-element--education"
