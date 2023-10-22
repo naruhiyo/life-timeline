@@ -9,8 +9,7 @@
     "lint": "next lint --dir src -f \"./index.js\"",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,json,css}'",
     "test": "jest",
-    "cypress": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress": "cypress open"
   },
   "dependencies": {
     "next": "13.4.13",
