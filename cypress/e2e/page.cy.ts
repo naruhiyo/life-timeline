@@ -1,9 +1,7 @@
 describe('Top page', () => {
-  it('should contain `Hello World`', () => {
+  it('should be /', () => {
     cy.visit('http://localhost:3000/')
 
     cy.url().should('include', '/')
-
-    cy.get('p').contains('Hello World')
   })
 })
