@@ -9,26 +9,26 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import styles from '@/components/page.module.css'
 
 const timelineData = {
-  "items": [
+  items: [
     {
-      "title": "ほげ大学 大学院修了",
-      "subtitle": "ふが専攻",
-      "content": "ぴよぴよ",
-      "date": "2019.03",
-      "type": "education"
+      title: 'ほげ大学 大学院修了',
+      subtitle: 'ふが専攻',
+      content: 'ぴよぴよ',
+      date: '2019.03',
+      type: 'education',
     },
     {
-      "title": "XX就職",
-      "subtitle": "XX事業部",
-      "content": "XXに携わる",
-      "date": "2019.04",
-      "type": "work"
-    }
-  ]
-};
+      title: 'XX就職',
+      subtitle: 'XX事業部',
+      content: 'XXに携わる',
+      date: '2019.04',
+      type: 'work',
+    },
+  ],
+}
 
-const educationColor = "rgb(214, 239, 255)";
-const workColor = "rgb(148, 193, 255)";
+const educationColor = 'rgb(214, 239, 255)'
+const workColor = 'rgb(148, 193, 255)'
 
 const itemList = timelineData.items.map((item, index) => {
   let itemClassName = 'vertical-timeline-element--education'
@@ -54,27 +54,25 @@ const itemList = timelineData.items.map((item, index) => {
       icon={itemIcon}
       key={index}
     >
-      <h3 className="vertical-timeline-element-title">{item.title}</h3>
-      <h4 className="vertical-timeline-element-subtitle">{item.subtitle}</h4>
+      <h3 className='vertical-timeline-element-title'>{item.title}</h3>
+      <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
       <p>{item.content}</p>
     </VerticalTimelineElement>
-  );
+  )
 })
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className="flex justify-end space-x-1">
-        <Button isIconOnly color="primary" aria-label="Download">
+      <div className='flex justify-end space-x-1'>
+        <Button isIconOnly color='primary' aria-label='Download'>
           <DownloadIcon />
         </Button>
-        <Button isIconOnly color="primary" aria-label="Add">
+        <Button isIconOnly color='primary' aria-label='Add'>
           <AddIcon />
         </Button>
       </div>
-      <VerticalTimeline>
-        {itemList}
-      </VerticalTimeline>
+      <VerticalTimeline>{itemList}</VerticalTimeline>
     </main>
   )
 }
