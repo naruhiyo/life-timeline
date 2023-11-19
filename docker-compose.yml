@@ -1,18 +1,23 @@
 services:
-  app:
+  web:
     build:
       context: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - lifetimeline_node_modules:/app/node_modules
     command: sh -c "npm run dev"
     networks:
-      - default
-      - lifetimeline_default
+      lifetimeline_default:
+  e2e:
+    image: cypress/included:cypress-12.17.3-node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+    working_dir: /app
+    volumes:
+      - .:/app
+    networks:
+      lifetimeline_default:
 volumes:
   lifetimeline_node_modules:
 networks:
   lifetimeline_default:
-    external: true

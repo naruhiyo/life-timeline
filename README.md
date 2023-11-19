@@ -2,25 +2,19 @@
 
 ## Getting Started
 
-1. Create network
-
-```console
-$ docker network create lifetimeline_default
-```
-
-2. Build docker image
+1. Build docker image
 
 ```console
 $ docker compose build
 ```
 
-3. Run the development server
+2. Run the development server
 
 ```consle
-$ docker compose up
+$ docker compose up -d web
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000)
+3. Open [http://localhost:3000](http://localhost:3000)
 
 ## Run Test
 
@@ -33,7 +27,11 @@ $ docker compose up -d
 2. Run test
 
 ```console
-$ docker compose exec app npm run test
+# Unit Test
+$ docker compose exec web npm run test
+
+# E2E
+$ docker compose run --rm e2e
 ```
 
 3. Stop the container
