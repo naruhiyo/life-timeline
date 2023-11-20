@@ -10,7 +10,7 @@ $ docker compose build
 
 2. Run the development server
 
-```consle
+```console
 $ docker compose up -d web
 ```
 
@@ -31,7 +31,7 @@ $ docker compose up -d
 $ docker compose exec web npm run test
 
 # E2E
-$ docker compose run --rm e2e
+$ docker compose run --rm cypress
 ```
 
 3. Stop the container
