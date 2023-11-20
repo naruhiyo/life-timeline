@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint --dir src -f \"./index.js\"",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,json,css}'",
+    "format:check": "prettier --check './**/*.{js,jsx,ts,tsx,json,css}'",
     "test": "jest",
     "cypress": "cypress open"
   },
