@@ -27,5 +27,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ACTION_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          npm run format \
+          npm run format:check \
           || gh pr comment ${{ github.event.pull_request.number }} --body "Run [#${GITHUB_RUN_ID}]($ACTION_URL): Format is invalid! Please run \`npm run format\`."
