@@ -16,7 +16,7 @@ services:
     volumes:
       - .:/app
     environment:
-      RUN_FQDN: web
+      HOST_FQDN: web
     networks:
       lifetimeline_default:
 volumes:
