@@ -3,5 +3,8 @@ describe('Top page', () => {
     cy.visit('/')
 
     cy.url().should('include', '/')
+
+    cy.contains('ぴよぴよ')
+    cy.screenshot()
   })
 })
