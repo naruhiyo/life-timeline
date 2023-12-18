@@ -17,7 +17,7 @@ jobs:
         with:
           version: 8.10.5
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       # Reviewdog is currently not supported ESLint format, so change the output format to rdjson by using index.js
       # In package.json, we use index.js to change linter output format.
       # Therefore, following reviewdog command specify rdjson in -f option.
