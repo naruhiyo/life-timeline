@@ -1,7 +1,7 @@
 name: reviewdog
 on: [pull_request]
 jobs:
-  npm-run-lint:
+  pnpm-run-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -12,20 +12,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.10.5
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       # Reviewdog is currently not supported ESLint format, so change the output format to rdjson by using index.js
       # In package.json, we use index.js to change linter output format.
       # Therefore, following reviewdog command specify rdjson in -f option.
       - name: Run reviewdog
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: (npm run lint 2>&1 | grep -o '{.*}' || echo "{}") | reviewdog -f=rdjson -reporter=github-pr-review -diff="git diff FETCH_HEAD" -fail-on-error=true
+        run: (pnpm run lint 2>&1 | grep -o '{.*}' || echo "{}") | reviewdog -f=rdjson -reporter=github-pr-review -diff="git diff FETCH_HEAD" -fail-on-error=true
       - name: Run prettier to check format
         if: ${{ always() }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ACTION_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          npm run format:check \
-          || gh pr comment ${{ github.event.pull_request.number }} --body "Run [#${GITHUB_RUN_ID}]($ACTION_URL): Format is invalid! Please run \`npm run format\`."
+          set +e
+          pnpm run format:check
+          EXIT_CODE_FORMAT=$?
+          set -e
+          if [ $EXIT_CODE_FORMAT -ne 0 ]; then
+            gh pr comment ${{ github.event.pull_request.number }} --body "Run [#${GITHUB_RUN_ID}]($ACTION_URL): Format is invalid! Please run \`pnpm run format\`."
+          fi
+
+          exit $EXIT_CODE_FORMAT
