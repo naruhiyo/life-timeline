@@ -31,5 +31,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ACTION_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          pnpm run format:check \
-          || gh pr comment ${{ github.event.pull_request.number }} --body "Run [#${GITHUB_RUN_ID}]($ACTION_URL): Format is invalid! Please run \`pnpm run format\`."
+          set +e
+          pnpm run format:check
+          EXIT_CODE_FORMAT=$?
+          set -e
+          if [ $EXIT_CODE_FORMAT -ne 0 ]; then
+            gh pr comment ${{ github.event.pull_request.number }} --body "Run [#${GITHUB_RUN_ID}]($ACTION_URL): Format is invalid! Please run \`pnpm run format\`."
+          fi
+
+          exit $EXIT_CODE_FORMAT
