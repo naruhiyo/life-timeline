@@ -16,6 +16,7 @@ services:
       dockerfile: cypress.Dockerfile
     volumes:
       - .:/app
+      - lifetimeline_node_modules:/app/node_modules
     environment:
       HOST_FQDN: web
     networks:
