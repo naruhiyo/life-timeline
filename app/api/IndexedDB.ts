@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { IndexedDBConfig } from '@/api/IndexedDBConfig'
 
 export type LifeTimelineDB = IDBDatabase | undefined
@@ -11,38 +10,47 @@ export class IndexedDB {
     IndexedDB.init()
   }
 
-  private static init(): void {
-    // DB作成
-    const request = window.indexedDB.open(IndexedDBConfig.DB_NAME, IndexedDBConfig.VERSION)
+  private static init(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // DB作成
+      const request: IDBOpenDBRequest = window.indexedDB.open(
+        IndexedDBConfig.DB_NAME,
+        IndexedDBConfig.VERSION,
+      )
 
-    /**
-     * Success to connect db
-     */
-    request.onsuccess = (): void => {
-      IndexedDB.db = request.result
-    }
-
-    /**
-     * Upgrade Event
-     * - The event has occured if a version updated.
-     * @param e {IDBVersionChangeEvent}
-     */
-    request.onupgradeneeded = (e: IDBVersionChangeEvent): void => {
-      IndexedDB.db = (e.target as IDBOpenDBRequest).result
-
-      const isExist = IndexedDB.db.objectStoreNames.contains(IndexedDBConfig.STORE_NAME)
-
-      if (!isExist) {
-        // Create Object store
-        IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
-          autoIncrement: true,
-        })
+      /**
+       * Success to connect db
+       */
+      request.onsuccess = (): void => {
+        IndexedDB.db = request.result
+        resolve()
       }
-    }
 
-    request.onerror = (e: Event): void => {
-      console.error('Error caused', e.target)
-    }
+      /**
+       * Upgrade Event
+       * - The event has occured if a version updated.
+       *
+       * @param e {IDBVersionChangeEvent}
+       */
+      request.onupgradeneeded = (e: IDBVersionChangeEvent): void => {
+        IndexedDB.db = (e.target as IDBOpenDBRequest).result
+
+        const isExist = IndexedDB.db.objectStoreNames.contains(IndexedDBConfig.STORE_NAME)
+
+        if (!isExist) {
+          // Create Object store
+          IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
+            autoIncrement: true,
+          })
+        }
+        resolve()
+      }
+
+      request.onerror = (e: Event): void => {
+        console.error('Error caused', e.target)
+        reject()
+      }
+    })
   }
 
   static getSingleton(): IndexedDB {
@@ -79,6 +87,38 @@ export class IndexedDB {
       transaction.onerror = (e: Event) => {
         console.warn('transaction error', e.target)
         reject(false)
+      }
+    })
+  }
+
+  /**
+   * Get all records
+   *
+   * @returns {Promise<T[]>}
+   */
+  async selectAll<T>(): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      if (IndexedDB.db === undefined || IndexedDB.db === null) {
+        console.warn("Insert failed because of the db doesn't connected.")
+        return resolve([])
+      }
+
+      const transaction: IDBTransaction = IndexedDB.db.transaction(
+        IndexedDBConfig.STORE_NAME,
+        'readonly',
+      )
+      const lifeTimelineStore: IDBRequest<T[]> = transaction
+        .objectStore(IndexedDBConfig.STORE_NAME)
+        .getAll()
+
+      lifeTimelineStore.onsuccess = (e: Event): void => {
+        const items: T[] = (e.target as IDBRequest<T[]>).result
+        resolve(items)
+      }
+
+      lifeTimelineStore.onerror = (e: Event) => {
+        console.warn('transaction error', e.target)
+        reject([])
       }
     })
   }

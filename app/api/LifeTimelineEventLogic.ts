@@ -12,4 +12,9 @@ export class LifeTimelineEventLogic {
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.insert<LifetimeEvent>(form)
   }
+
+  async getLifeTimelineEvent(): Promise<LifetimeEvent[]> {
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    return await db.selectAll<LifetimeEvent>()
+  }
 }

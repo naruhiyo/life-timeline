@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import styles from '@/components/profile/new/page.module.css'
-import { LifetimeEvent } from '@/types/LifetimeEvent'
+import { LifetimeEvent, LifetimeEventType } from '@/types/LifetimeEvent'
 
 export default function Page() {
   // handle routing
@@ -77,7 +77,7 @@ export default function Page() {
               orientation='horizontal'
               value={form.type}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ type: e.target.value })
+                handleChange({ type: e.target.value as LifetimeEventType })
               }}
             >
               <Radio value='education'>学び</Radio>
