@@ -10,6 +10,6 @@ describe('Top page', () => {
     cy.visit('/')
 
     cy.url().should('include', '/')
-    cy.screenshot()
+    cy.screenshot('')
   })
 })

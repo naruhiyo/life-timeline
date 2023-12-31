@@ -124,6 +124,11 @@ export class IndexedDB {
     })
   }
 
+  /**
+   * Close DB
+   *
+   * @returns {Promise<void>}
+   */
   async closeDB(): Promise<void> {
     if (IndexedDB.db !== undefined && IndexedDB.db !== null) {
       await IndexedDB.db.close()

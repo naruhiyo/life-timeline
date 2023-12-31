@@ -1,4 +1,4 @@
-export type LifetimeEvent = {
+export type LifeTimelineEvent = {
   type: 'education' | 'work'
   date: string
   title: string
@@ -6,4 +6,4 @@ export type LifetimeEvent = {
   content: string
 }
 
-export type LifetimeEventType = 'education' | 'work'
+export type LifeTimelineEventType = 'education' | 'work'
