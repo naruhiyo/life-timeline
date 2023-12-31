@@ -10,6 +10,6 @@ describe('Display life-timeline event items', () => {
     cy.visit('/')
 
     cy.url().should('include', '/')
-    cy.screenshot()
+    cy.screenshot('')
   })
 })
