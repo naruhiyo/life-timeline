@@ -8,5 +8,5 @@ export const IndexedDBConfig: {
 } = {
   DB_NAME: 'LifetimelineDB',
   STORE_NAME: 'lifetimeline-store',
-  VERSION: 1,
+  VERSION: 5,
 }

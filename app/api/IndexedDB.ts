@@ -3,7 +3,7 @@ import { IndexedDBConfig } from '@/api/IndexedDBConfig'
 export type LifeTimelineDB = IDBDatabase | undefined
 
 export class IndexedDB {
-  private static instance = new IndexedDB()
+  private static instance: IndexedDB
   private static db: LifeTimelineDB
 
   private constructor() {
@@ -53,9 +53,10 @@ export class IndexedDB {
     })
   }
 
-  static getSingleton(): IndexedDB {
+  static async getSingleton(): Promise<IndexedDB> {
     if (IndexedDB.instance === null || IndexedDB.instance === undefined) {
       IndexedDB.instance = new IndexedDB()
+      await IndexedDB.init()
     }
 
     return IndexedDB.instance
@@ -99,7 +100,7 @@ export class IndexedDB {
   async selectAll<T>(): Promise<T[]> {
     return new Promise((resolve, reject) => {
       if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("Insert failed because of the db doesn't connected.")
+        console.warn("SelectAll failed because of the db doesn't connected.")
         return resolve([])
       }
 
@@ -123,9 +124,40 @@ export class IndexedDB {
     })
   }
 
-  closeDB(): void {
+  async closeDB(): Promise<void> {
     if (IndexedDB.db !== undefined && IndexedDB.db !== null) {
-      IndexedDB.db.close()
+      await IndexedDB.db.close()
     }
+  }
+
+  /**
+   * Clear all records
+   * @returns {Promise<void>}
+   */
+  async deleteAll(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (IndexedDB.db === undefined || IndexedDB.db === null) {
+        console.warn("Insert failed because of the db doesn't connected.")
+        return resolve()
+      }
+
+      // 読み書きトランザクションを開き、データを消去する準備をする
+      const transaction: IDBTransaction = IndexedDB.db.transaction(
+        IndexedDBConfig.STORE_NAME,
+        'readwrite',
+      )
+      const lifeTimelineStore: IDBObjectStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+
+      lifeTimelineStore.clear()
+
+      transaction.oncomplete = (_: Event) => {
+        resolve()
+      }
+
+      transaction.onerror = (e: Event) => {
+        console.error('error', e.target)
+        reject()
+      }
+    })
   }
 }

@@ -1,40 +1,48 @@
-// const screenshotOptions: Partial<Cypress.ScreenshotOptions> = {
-//   overwrite: true,
-// }
+import { IndexedDB } from '@/api/IndexedDB'
 
-//     // FIXME: fix this when impl test code
-//     describe('Event register page', () => {
-//   it('should be input forms', () => {
-//     // cy.visit('/')
+const screenshotOptions: Partial<Cypress.ScreenshotOptions> = {
+  overwrite: true,
+}
 
-//     // cy.screenshot('before-added-event', screenshotOptions)
+describe('Event register page', () => {
+  beforeEach(async () => {
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    await db.deleteAll()
+  })
 
-//     // // TODO: Add an assert to check if a test item doesn't added
+  it('should be input forms', () => {
+    cy.visit('/')
 
-//     // cy.get('a[href="/profile/new"]').click()
+    cy.screenshot('profile/new/before-added-event', screenshotOptions)
 
-//     // cy.url().should('include', '/profile/new')
+    const beforeItems = cy.get('.vertical-timeline').find('.vertical-timeline-element')
+    beforeItems.should('have.length', 0)
 
-//     // cy.screenshot('before-input', screenshotOptions)
+    cy.get('a[href="/profile/new"]').click()
 
-//     // cy.get('main').contains('新規追加')
+    cy.url().should('include', '/profile/new')
 
-//     // const now = new Date()
-//     // const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
-//     // cy.get('input[type="date"]').type(date)
+    cy.screenshot('profile/new/before-input', screenshotOptions)
 
-//     // cy.get('input[type="text"]').type('cypress-test-event')
+    cy.get('main').contains('新規追加')
 
-//     // cy.get('textarea').first().type('hello world from cypress!')
+    const now = new Date()
+    const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+    cy.get('input[type="date"]').type(date)
 
-//     // cy.screenshot('after-input', screenshotOptions)
+    cy.get('input[type="text"]').type('cypress-test-event')
 
-//     // cy.get('button').click()
+    cy.get('textarea').first().type('hello world from cypress!')
 
-//     // cy.get('a[href="/"]').click()
+    cy.screenshot('profile/new/after-input', screenshotOptions)
 
-//     // // TODO: Add an assert to check if the item added
+    cy.get('button').click()
 
-//     // cy.screenshot('after-added-event', screenshotOptions)
-//   })
-// })
+    cy.screenshot('profile/new/after-added-event', screenshotOptions)
+
+    cy.contains('button', 'Close').click()
+
+    const afterItems = cy.get('.vertical-timeline').find('.vertical-timeline-element')
+    afterItems.should('have.length', 1)
+  })
+})
