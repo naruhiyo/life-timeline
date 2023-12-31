@@ -13,13 +13,13 @@ import {
   Tooltip,
 } from '@nextui-org/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import styles from '@/components/page.module.css'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
-import { LifetimeEvent } from '@/types/LifetimeEvent'
 
 const timelineItemMap: {
   education: {
@@ -59,7 +59,9 @@ const downloadFormatItems: Array<{
   },
 ]
 
-export default function Home() {
+export default function Home(): JSX.Element {
+  // handle routing
+  const router = useRouter()
   const [items, setItems] = useState([] as LifeTimelineEvent[])
   const downloader: Downloader = new Downloader()
 
@@ -68,7 +70,7 @@ export default function Home() {
     setItems(await logic.getLifeTimelineEvent())
   }
 
-  const download = (key) => {
+  const download = (key: string) => {
     const downloader: Downloader = new Downloader()
     const targetElement: HTMLElement | null = document.getElementById(
       'target-download-component-id',
@@ -78,6 +80,12 @@ export default function Home() {
       return false
     }
     downloader.download(targetElement, key)
+  }
+
+  const redirectEdit = (id: string): void => {
+    // for enhanced security
+    const encodedId: string = btoa(id)
+    router.push(`/profile/edit/${encodedId}`)
   }
 
   useEffect(() => {
@@ -96,7 +104,7 @@ export default function Home() {
           <DropdownMenu
             aria-label='Dynamic Actions'
             items={downloadFormatItems}
-            onAction={(key) => download(key)}
+            onAction={(key) => download(key as string)}
           >
             {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
           </DropdownMenu>
@@ -111,30 +119,32 @@ export default function Home() {
       </div>
 
       <div id='target-download-component-id'>
-        <VerticalTimeline lineColor=''>
-          {items.map((item, index) => {
-            const className: string = `vertical-timeline-element--${item.type}`
-            const color: string = timelineItemMap[item.type].color
-            const icon = timelineItemMap[item.type].icon
+        {items.length > 0 && (
+          <VerticalTimeline lineColor=''>
+            {items.map((item, index) => {
+              const className: string = `vertical-timeline-element--${item.type}`
+              const color: string = timelineItemMap[item.type].color
+              const icon = timelineItemMap[item.type].icon
 
-            return (
-              <VerticalTimelineElement
-                visible={true}
-                className={className}
-                contentStyle={{ background: color, color: '#222' }}
-                contentArrowStyle={{ borderRight: `7px solid ${color}` }}
-                date={item.date}
-                iconStyle={{ background: color, color: '#222' }}
-                icon={icon}
-                key={index}
-              >
-                <h3 className='vertical-timeline-element-title'>{item.title}</h3>
-                <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
-                <p>{item.content}</p>
-              </VerticalTimelineElement>
-            )
-          })}
-        </VerticalTimeline>
+              return (
+                <VerticalTimelineElement
+                  visible={true}
+                  className={className}
+                  contentStyle={{ background: color, color: '#222' }}
+                  contentArrowStyle={{ borderRight: `7px solid ${color}` }}
+                  date={item.date}
+                  iconStyle={{ background: color, color: '#222' }}
+                  icon={icon}
+                  key={index}
+                >
+                  <h3 className='vertical-timeline-element-title'>{item.title}</h3>
+                  <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
+                  <p>{item.content}</p>
+                </VerticalTimelineElement>
+              )
+            })}
+          </VerticalTimeline>
+        )}
       </div>
     </main>
   )
