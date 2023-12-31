@@ -29,4 +29,35 @@ describe('IndexedDB Test', () => {
       })
     })
   })
+
+  describe('selectAll()', () => {
+    beforeEach(async () => {
+      // reset all data before each tests.
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      await db.deleteAll()
+    })
+
+    test('Obtain three lifetime-event items when the method is called once.', async () => {
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1' })
+      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2' })
+      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3' })
+
+      const actualItems: TestForm[] = await db.selectAll<TestForm>()
+      expect(actualItems).toEqual([
+        {
+          id: 'test-id1',
+          test: 'hello1',
+        },
+        {
+          id: 'test-id2',
+          test: 'hello2',
+        },
+        {
+          id: 'test-id3',
+          test: 'hello3',
+        },
+      ])
+    })
+  })
 })

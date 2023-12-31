@@ -6,6 +6,7 @@ import SchoolIcon from '@mui/icons-material/School'
 import WorkIcon from '@mui/icons-material/Work'
 import { Button, Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
@@ -32,12 +33,20 @@ const timelineItemMap: {
   },
 }
 
-export default function Home() {
+export default function Home(): JSX.Element {
+  // handle routing
+  const router = useRouter()
   const [items, setItems] = useState([] as LifeTimelineEvent[])
 
   const loadItems = async (): Promise<void> => {
     const logic = new LifeTimelineEventLogic()
     setItems(await logic.getLifeTimelineEvent())
+  }
+
+  const redirectEdit = (id: string): void => {
+    // for enhanced security
+    const encodedId: string = btoa(id)
+    router.push(`/profile/edit/${encodedId}`)
   }
 
   useEffect(() => {
@@ -59,30 +68,35 @@ export default function Home() {
         </Link>
       </div>
 
-      <VerticalTimeline lineColor=''>
-        {items.map((item, index) => {
-          const className: string = `vertical-timeline-element--${item.type}`
-          const color: string = timelineItemMap[item.type].color
-          const icon = timelineItemMap[item.type].icon
+      {items.length > 0 && (
+        <VerticalTimeline lineColor=''>
+          {items.map((item, index) => {
+            const className: string = `vertical-timeline-element--${item.type}`
+            const color: string = timelineItemMap[item.type].color
+            const icon = timelineItemMap[item.type].icon
 
-          return (
-            <VerticalTimelineElement
-              visible={true}
-              className={className}
-              contentStyle={{ background: color, color: '#222' }}
-              contentArrowStyle={{ borderRight: `7px solid ${color}` }}
-              date={item.date}
-              iconStyle={{ background: color, color: '#222' }}
-              icon={icon}
-              key={index}
-            >
-              <h3 className='vertical-timeline-element-title'>{item.title}</h3>
-              <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
-              <p>{item.content}</p>
-            </VerticalTimelineElement>
-          )
-        })}
-      </VerticalTimeline>
+            return (
+              <VerticalTimelineElement
+                visible={true}
+                className={className}
+                contentStyle={{ background: color, color: '#222' }}
+                contentArrowStyle={{ borderRight: `7px solid ${color}` }}
+                date={item.date}
+                iconStyle={{ background: color, color: '#222' }}
+                icon={icon}
+                key={index}
+                onTimelineElementClick={() => {
+                  redirectEdit(item.id)
+                }}
+              >
+                <h3 className='vertical-timeline-element-title'>{item.title}</h3>
+                <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
+                <p>{item.content}</p>
+              </VerticalTimelineElement>
+            )
+          })}
+        </VerticalTimeline>
+      )}
     </main>
   )
 }
