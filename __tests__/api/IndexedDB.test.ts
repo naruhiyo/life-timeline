@@ -4,6 +4,12 @@ import { IndexedDB } from '@/api/IndexedDB'
 type TestForm = { id: string; test: string }
 
 describe('IndexedDB Test', () => {
+  beforeEach(async () => {
+    // reset all data before each tests.
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    await db.deleteAll()
+  })
+
   describe('getSingleton()', () => {
     test('An instance must be unique.', async () => {
       const actual: IndexedDB = await IndexedDB.getSingleton()
@@ -31,13 +37,7 @@ describe('IndexedDB Test', () => {
   })
 
   describe('selectAll()', () => {
-    beforeEach(async () => {
-      // reset all data before each tests.
-      const db: IndexedDB = await IndexedDB.getSingleton()
-      await db.deleteAll()
-    })
-
-    test('Obtain three lifetime-event items when the method is called once.', async () => {
+    test('Obtain three life-timeline event items when the method is called once.', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
       await db.insert<TestForm>({ id: 'test-id1', test: 'hello1' })
       await db.insert<TestForm>({ id: 'test-id2', test: 'hello2' })
@@ -58,6 +58,34 @@ describe('IndexedDB Test', () => {
           test: 'hello3',
         },
       ])
+    })
+  })
+
+  describe('delete()', () => {
+    test('Delete a life-timeline event item from IndexedDB when the method is called once.', async () => {
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      await db.insert<TestForm>({ id: 'test-id', test: 'hello1' })
+
+      const actual = await db.delete('test-id')
+
+      const items: TestForm[] = await db.selectAll<TestForm>()
+
+      expect(actual).toEqual(true)
+      expect(items).toEqual([])
+    })
+  })
+
+  describe('deleteAll()', () => {
+    test('Delete three life-timeline event items from IndexedDB when the method is called once.', async () => {
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1' })
+      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2' })
+      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3' })
+
+      await db.deleteAll()
+
+      const actualItems: TestForm[] = await db.selectAll<TestForm>()
+      expect(actualItems).toEqual([])
     })
   })
 })
