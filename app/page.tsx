@@ -6,6 +6,7 @@ import SchoolIcon from '@mui/icons-material/School'
 import WorkIcon from '@mui/icons-material/Work'
 import { Button, Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import styles from '@/components/page.module.css'
 
@@ -47,6 +48,7 @@ const itemList = timelineData.items.map((item, index) => {
 
   return (
     <VerticalTimelineElement
+      visible={true}
       className={itemClassName}
       contentStyle={{ background: itemColor, color: '#222' }}
       contentArrowStyle={{ borderRight: `7px solid ${itemColor}` }}
@@ -63,6 +65,11 @@ const itemList = timelineData.items.map((item, index) => {
 })
 
 export default function Home() {
+  useEffect(() => {
+    const htmlElement = document.querySelector('html') as HTMLElement
+    htmlElement.setAttribute('style', '--line-color: #fff;')
+  }, [])
+
   return (
     <main className={styles.main}>
       <div className='flex justify-end space-x-1'>
@@ -77,7 +84,7 @@ export default function Home() {
           </Tooltip>
         </Link>
       </div>
-      <VerticalTimeline>{itemList}</VerticalTimeline>
+      <VerticalTimeline lineColor=''>{itemList}</VerticalTimeline>
     </main>
   )
 }
