@@ -1,4 +1,5 @@
 'use client'
+import { Delete } from '@mui/icons-material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import {
   Card,
@@ -19,7 +20,7 @@ import {
   ModalHeader,
   ModalFooter,
 } from '@nextui-org/react'
-import { useRouter } from 'next/navigation' // next/router ではない
+import { useRouter, useParams } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import styles from '@/components/profile/new/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
@@ -27,11 +28,14 @@ import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEv
 export default function Page() {
   // handle routing
   const router = useRouter()
+  const pathParams: {
+    id: string
+  } = useParams()
   // handle modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   // input form
   const [form, setForm] = useState({
-    id: crypto.randomUUID(),
+    id: '',
     type: 'education',
     date: '',
     title: '',
@@ -48,11 +52,7 @@ export default function Page() {
   const handleSubmit = async () => {
     const dymanicLogic = await import('@/api/LifeTimelineEventLogic')
     const logic = new dymanicLogic.LifeTimelineEventLogic()
-    const isCreated: boolean = await logic.createLifeTimelineEvent(form)
-
-    if (isCreated) {
-      onOpen()
-    }
+    // TODO: update func
   }
 
   // modal closed event
@@ -60,14 +60,32 @@ export default function Page() {
     router.push('/')
   }
 
+  const submitDelete = async () => {
+    const isConfirm: boolean = confirm('本当に削除しますか？')
+
+    if (isConfirm) {
+      const dymanicLogic = await import('@/api/LifeTimelineEventLogic')
+      const logic = new dymanicLogic.LifeTimelineEventLogic()
+      const isDeleted: boolean = await logic.deleteLifeTimelineEvent(pathParams.id)
+
+      if (isDeleted) {
+        router.push('/')
+      }
+    }
+  }
+
   return (
     <main className={styles.main}>
       <div className='flex justify-center'>
         <Card className='w-full'>
-          <CardHeader className='flex gap-3'>
+          <CardHeader className='flex justify-between gap-3'>
             <div className='flex flex-col'>
               <p className='text-md'>新規追加</p>
             </div>
+
+            <Button isIconOnly color='danger' variant='light' onClick={submitDelete}>
+              <Delete />
+            </Button>
           </CardHeader>
 
           <Divider />

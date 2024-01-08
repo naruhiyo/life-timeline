@@ -12,6 +12,9 @@ export class IndexedDB {
 
   private static init(): Promise<void> {
     return new Promise((resolve, reject) => {
+      // for debug
+      // window.indexedDB.deleteDatabase(IndexedDBConfig.DB_NAME)
+
       // DB作成
       const request: IDBOpenDBRequest = window.indexedDB.open(
         IndexedDBConfig.DB_NAME,
@@ -40,7 +43,7 @@ export class IndexedDB {
         if (!isExist) {
           // Create Object store
           IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
-            autoIncrement: true,
+            keyPath: 'id',
           })
         }
         resolve()
@@ -133,6 +136,37 @@ export class IndexedDB {
     if (IndexedDB.db !== undefined && IndexedDB.db !== null) {
       await IndexedDB.db.close()
     }
+  }
+
+  /**
+   * Delete a record
+   *
+   * @param id unique key
+   * @returns {Promise<boolean>}
+   */
+  async delete(id: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (IndexedDB.db === undefined || IndexedDB.db === null) {
+        console.warn("SelectAll failed because of the db doesn't connected.")
+        return resolve(false)
+      }
+
+      // start transaction
+      const transaction = IndexedDB.db!.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
+
+      // delete from store
+      const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+      lifeTimelineStore.delete(id)
+
+      transaction.oncomplete = (_: Event) => {
+        resolve(true)
+      }
+
+      transaction.onerror = (e: Event) => {
+        console.error('delete record error', e)
+        reject(false)
+      }
+    })
   }
 
   /**

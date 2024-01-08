@@ -6,6 +6,7 @@ import SchoolIcon from '@mui/icons-material/School'
 import WorkIcon from '@mui/icons-material/Work'
 import { Button, Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation' // next/router ではない
 import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import styles from '@/components/page.module.css'
@@ -32,12 +33,20 @@ const timelineItemMap: {
 }
 
 export default function Home() {
+  // handle routing
+  const router = useRouter()
   const [items, setItems] = useState([] as LifeTimelineEvent[])
 
   const loadItems = async (): Promise<void> => {
     const dymanicLogic = await import('@/api/LifeTimelineEventLogic')
     const logic = new dymanicLogic.LifeTimelineEventLogic()
     setItems(await logic.getLifeTimelineEvent())
+  }
+
+  const redirectEdit = (id: string): void => {
+    // for enhanced security
+    const encodedId: string = btoa(id)
+    router.push(`/profile/edit/${encodedId}`) // ここでリダイレクト
   }
 
   useEffect(() => {
@@ -76,6 +85,9 @@ export default function Home() {
                 iconStyle={{ background: color, color: '#222' }}
                 icon={icon}
                 key={index}
+                onTimelineElementClick={() => {
+                  redirectEdit(item.id)
+                }}
               >
                 <h3 className='vertical-timeline-element-title'>{item.title}</h3>
                 <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
