@@ -10,6 +10,7 @@ describe('LifeTimelineEventLogic Test', () => {
       jest.spyOn(db, 'insert').mockImplementation(() => Promise.resolve(true))
 
       const testData: LifeTimelineEvent = {
+        id: 'test-id',
         type: 'education',
         date: '2023-12-31',
         title: 'jest title',
@@ -31,6 +32,7 @@ describe('LifeTimelineEventLogic Test', () => {
       jest.spyOn(db, 'selectAll').mockImplementation(() =>
         Promise.resolve([
           {
+            id: 'test-id',
             type: 'education',
             date: '2023-12-31',
             title: 'jest title',
@@ -46,6 +48,7 @@ describe('LifeTimelineEventLogic Test', () => {
       expect(db.selectAll).toHaveBeenCalledTimes(1)
       expect(actualList).toEqual([
         {
+          id: 'test-id',
           type: 'education',
           date: '2023-12-31',
           title: 'jest title',
@@ -53,6 +56,20 @@ describe('LifeTimelineEventLogic Test', () => {
           content: 'jest content',
         },
       ])
+    })
+  })
+
+  describe('delete LifeTimelineEvent', () => {
+    test('delete a record from db`', async () => {
+      const db = await IndexedDB.getSingleton()
+      jest.spyOn(db, 'delete').mockImplementation((_: string) => Promise.resolve(true))
+
+      const testId = btoa('test-id')
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual = await logic.deleteLifeTimelineEvent(testId)
+
+      expect(db.delete).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual(true)
     })
   })
 })

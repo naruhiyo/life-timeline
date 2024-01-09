@@ -19,6 +19,8 @@ describe('Event register page', () => {
 
     cy.get('a[href="/profile/new"]').click()
 
+    cy.spyCypress()
+
     cy.url().should('include', '/profile/new')
 
     cy.screenshot('before-input', screenshotOptions)
