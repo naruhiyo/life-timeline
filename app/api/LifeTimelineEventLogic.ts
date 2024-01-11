@@ -33,4 +33,14 @@ export class LifeTimelineEventLogic {
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.delete(decodedId)
   }
+
+  /**
+   * Close db
+   *
+   * @returns {Promise<void>}
+   */
+  async close(): Promise<void> {
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    return await db.closeDB()
+  }
 }
