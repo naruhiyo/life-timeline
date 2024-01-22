@@ -30,7 +30,6 @@ export class LifeTimelineEventLogic {
    * @returns {Promise<boolean>}
    */
   async deleteLifeTimelineEvent(encoedId: string): Promise<boolean> {
-    console.log('pathParams.id', encoedId, btoa(encodeURIComponent('test-id')))
     const decodedId: string = atob(decodeURIComponent(encoedId))
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.delete(decodedId)
