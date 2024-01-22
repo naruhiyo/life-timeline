@@ -32,7 +32,7 @@ const timelineItemMap: {
   },
 }
 
-export default function Home() {
+export default function Home(): JSX.Element {
   // handle routing
   const router = useRouter()
   const [items, setItems] = useState([] as LifeTimelineEvent[])

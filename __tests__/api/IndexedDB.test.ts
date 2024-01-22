@@ -23,9 +23,11 @@ describe('IndexedDB Test', () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
       const form: TestForm = { id: 'test-id', test: 'hello' }
 
-      await db.insert<TestForm>(form)
+      const actual = await db.insert<TestForm>(form)
 
       const actualItems: TestForm[] = await db.selectAll<TestForm>()
+
+      expect(actual).toBe(true)
       expect(actualItems[0]).toEqual({
         id: 'test-id',
         test: 'hello',

@@ -1,3 +1,4 @@
+import { encode } from 'punycode'
 import { IndexedDB } from '@/api/IndexedDB'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 
@@ -29,18 +30,9 @@ export class LifeTimelineEventLogic {
    * @returns {Promise<boolean>}
    */
   async deleteLifeTimelineEvent(encoedId: string): Promise<boolean> {
-    const decodedId: string = atob(encoedId)
+    console.log('pathParams.id', encoedId, btoa(encodeURIComponent('test-id')))
+    const decodedId: string = atob(decodeURIComponent(encoedId))
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.delete(decodedId)
-  }
-
-  /**
-   * Close db
-   *
-   * @returns {Promise<void>}
-   */
-  async close(): Promise<void> {
-    const db: IndexedDB = await IndexedDB.getSingleton()
-    return await db.closeDB()
   }
 }

@@ -24,7 +24,7 @@ import { useState } from 'react'
 import styles from '@/components/profile/new/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
-export default function Page() {
+export default function Page(): JSX.Element {
   // handle routing
   const router = useRouter()
   // handle modal
