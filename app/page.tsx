@@ -4,10 +4,11 @@ import AddIcon from '@mui/icons-material/Add'
 import DownloadIcon from '@mui/icons-material/Download'
 import SchoolIcon from '@mui/icons-material/School'
 import WorkIcon from '@mui/icons-material/Work'
-import { Button, Tooltip } from '@nextui-org/react'
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip } from '@nextui-org/react'
 import Link from 'next/link'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import styles from '@/components/page.module.css'
+import domtoimage from "dom-to-image";
 
 const timelineData = {
   items: [
@@ -63,12 +64,77 @@ const itemList = timelineData.items.map((item, index) => {
 })
 
 export default function Home() {
+  const downloadFormatItems = [
+    {
+      key: "pdf",
+      label: "PDF"
+    },
+    {
+      key: "png",
+      label: "PNG"
+    },
+    {
+      key: "svg",
+      label: "SVG"
+    },
+  ]
+
+  const downloadWithFormat = async (format) => {
+    const fileName = "life-timeline"
+    const rootElementId = "mainComponentId";
+    const imgbase = document.getElementById(rootElementId);
+    let downloadElement; 
+    let bgColor;
+    switch (format) {
+      case "svg":
+        downloadElement = document.createElement("a");
+        bgColor = window.getComputedStyle(document.body).backgroundColor;
+        console.log(bgColor);
+        downloadElement.href = await domtoimage.toSvg(imgbase, {
+          width: imgbase.clientWidth,
+          height: imgbase.clientHeight,
+          bgcolor: bgColor
+        });
+        downloadElement.download=`${fileName}.svg`;
+        downloadElement.click();
+        break;
+      case "png":
+        downloadElement = document.createElement("a");
+        downloadElement.href = await domtoimage.toPng(imgbase, {
+          width: imgbase.clientWidth,
+          height: imgbase.clientHeight
+        });
+        downloadElement.download=`${fileName}.png`;
+        downloadElement.click();
+        break;
+      case "pdf":
+        console.log("pdf will be supported in the future");
+        break;
+      default:
+        console.error(`Invalid download format. ${format}`);
+        break;
+    }
+  }
+
   return (
     <main className={styles.main}>
       <div className='flex justify-end space-x-1'>
-        <Button isIconOnly color='primary' aria-label='Download'>
-          <DownloadIcon />
-        </Button>
+        <Dropdown backdrop="blur">
+          <DropdownTrigger>
+            <Button isIconOnly color='primary' aria-label='Download'>
+              <DownloadIcon />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Dynamic Actions" items={downloadFormatItems} onAction={downloadWithFormat}>
+            {(item) => (
+              <DropdownItem
+                key={item.key}
+              >
+                {item.label}
+              </DropdownItem>
+            )}
+          </DropdownMenu>
+        </Dropdown>
         <Link href='/profile/new'>
           <Tooltip content='イベントを登録する'>
             <Button isIconOnly color='primary' aria-label='Add'>
@@ -77,7 +143,9 @@ export default function Home() {
           </Tooltip>
         </Link>
       </div>
-      <VerticalTimeline>{itemList}</VerticalTimeline>
+      <div id="mainComponentId">
+        <VerticalTimeline>{itemList}</VerticalTimeline>
+      </div>
     </main>
   )
 }
