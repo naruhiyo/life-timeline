@@ -1,4 +1,4 @@
-FROM node:18.16-alpine
+FROM node:18.17-alpine
 
 WORKDIR /app/
 COPY ./package.json ./package-lock.json ./pnpm-lock.yaml ./.npmrc ./
