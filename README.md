@@ -42,5 +42,5 @@ $ docker compose down
 
 ## For Developpers
 
-- Node.js: 18.16.0
-- npm: 9.8.1
+- Node.js: 20.10.0
+- npm: 10.2.3

@@ -3,16 +3,19 @@ on: [pull_request]
 jobs:
   run:
     runs-on: ubuntu-latest
+    container:
+      image: cypress/included:cypress-13.6.3-node-20.10.0-chrome-121.0.6167.85-1-ff-118.0.2-edge-118.0.2088.46-1
+      options: --user 1001
     steps:
       - uses: actions/checkout@v3
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: '20.10.0'
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8.10.5
+          version: 8.15.0
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Run unit test
@@ -22,6 +25,7 @@ jobs:
         with:
           build: pnpm run build
           start: pnpm start
+          browser: chrome
       # Ref: https://github.com/cypress-io/github-action#artifacts
       - uses: actions/upload-artifact@v3
         # add the line below to store screenshots only on failures
