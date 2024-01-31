@@ -10,7 +10,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import styles from '@/components/page.module.css'
-import { LifetimeEvent } from '@/types/LifetimeEvent'
+import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 
 const timelineItemMap: {
   education: {
@@ -33,7 +33,7 @@ const timelineItemMap: {
 }
 
 export default function Home() {
-  const [items, setItems] = useState([] as LifetimeEvent[])
+  const [items, setItems] = useState([] as LifeTimelineEvent[])
 
   const loadItems = async (): Promise<void> => {
     const logic = new LifeTimelineEventLogic()

@@ -21,32 +21,33 @@ import {
 } from '@nextui-org/react'
 import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
-import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import styles from '@/components/profile/new/page.module.css'
-import { LifetimeEvent, LifetimeEventType } from '@/types/LifetimeEvent'
+import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
-export default function Page() {
+export default function Page(): JSX.Element {
   // handle routing
   const router = useRouter()
   // handle modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   // input form
   const [form, setForm] = useState({
+    id: crypto.randomUUID(),
     type: 'education',
     date: '',
     title: '',
     subtitle: '',
     content: '',
-  } as LifetimeEvent)
+  } as LifeTimelineEvent)
 
   // input change event
-  const handleChange = (value: Partial<LifetimeEvent>) => {
+  const handleChange = (value: Partial<LifeTimelineEvent>) => {
     setForm({ ...form, ...value })
   }
 
   // submit event
   const handleSubmit = async () => {
-    const logic = new LifeTimelineEventLogic()
+    const dymanicLogic = await import('@/api/LifeTimelineEventLogic')
+    const logic = new dymanicLogic.LifeTimelineEventLogic()
     const isCreated: boolean = await logic.createLifeTimelineEvent(form)
 
     if (isCreated) {
@@ -56,7 +57,7 @@ export default function Page() {
 
   // modal closed event
   const handleModalClosed = () => {
-    router.push('/') // ここでリダイレクト
+    router.push('/')
   }
 
   return (
@@ -77,7 +78,7 @@ export default function Page() {
               orientation='horizontal'
               value={form.type}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ type: e.target.value as LifetimeEventType })
+                handleChange({ type: e.target.value as LifeTimelineEventType })
               }}
             >
               <Radio value='education'>学び</Radio>

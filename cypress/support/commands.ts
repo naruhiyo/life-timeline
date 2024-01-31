@@ -35,3 +35,20 @@
 //     }
 //   }
 // }
+
+/**
+ * Mock crypto module
+ */
+Cypress.Commands.add('spyCypress', () => {
+  const cryptoMock = (() => {
+    return {
+      randomUUID: () => 'test-id',
+    }
+  })()
+
+  cy.window().then((win) => {
+    Object.defineProperty(win, 'crypto', {
+      value: cryptoMock,
+    })
+  })
+})
