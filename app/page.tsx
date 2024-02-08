@@ -15,11 +15,11 @@ import {
 import Link from 'next/link'
 import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
+import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import styles from '@/components/page.module.css'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 import { LifetimeEvent } from '@/types/LifetimeEvent'
-import domtoimage from 'dom-to-image'
 
 const timelineItemMap: {
   education: {
@@ -61,44 +61,9 @@ const downloadFormatItems: Array<{
 
 const TARGET_DOWNLOAD_COMPONENT_ID = 'target-download-component-id'
 
-const downloadWithFormat = async (format) => {
-  const fileName = 'life-timeline'
-  const rootElementId = TARGET_DOWNLOAD_COMPONENT_ID
-  const imgbase = document.getElementById(rootElementId)
-  let downloadElement
-  let bgColor
-  switch (format) {
-    case 'svg':
-      downloadElement = document.createElement('a')
-      bgColor = window.getComputedStyle(document.body).backgroundColor
-      downloadElement.href = await domtoimage.toSvg(imgbase, {
-        width: imgbase.clientWidth,
-        height: imgbase.clientHeight,
-        bgcolor: bgColor,
-      })
-      downloadElement.download = `${fileName}.svg`
-      downloadElement.click()
-      break
-    case 'png':
-      downloadElement = document.createElement('a')
-      downloadElement.href = await domtoimage.toPng(imgbase, {
-        width: imgbase.clientWidth,
-        height: imgbase.clientHeight,
-      })
-      downloadElement.download = `${fileName}.png`
-      downloadElement.click()
-      break
-    case 'pdf':
-      console.log('pdf will be supported in the future')
-      break
-    default:
-      console.error(`Invalid download format. ${format}`)
-      break
-  }
-}
-
 export default function Home() {
   const [items, setItems] = useState([] as LifeTimelineEvent[])
+  const downloader: Downloader = new Downloader()
 
   const loadItems = async (): Promise<void> => {
     const logic = new LifeTimelineEventLogic()
@@ -121,7 +86,7 @@ export default function Home() {
           <DropdownMenu
             aria-label='Dynamic Actions'
             items={downloadFormatItems}
-            onAction={downloadWithFormat}
+            onAction={(key) => downloader.download(TARGET_DOWNLOAD_COMPONENT_ID, key)}
           >
             {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
           </DropdownMenu>
