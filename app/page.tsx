@@ -41,7 +41,10 @@ const timelineItemMap: {
   },
 }
 
-const downloadFormatItems = [
+const downloadFormatItems: Array<{
+  key: string
+  label: string
+}> = [
   {
     key: 'pdf',
     label: 'PDF',
