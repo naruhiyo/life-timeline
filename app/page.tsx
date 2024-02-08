@@ -59,7 +59,7 @@ const downloadFormatItems: Array<{
   },
 ]
 
-const TARGET_DOWNLOAD_COMPONENT_ID = 'targetDownloadComponentId'
+const TARGET_DOWNLOAD_COMPONENT_ID = 'target-download-component-id'
 
 const downloadWithFormat = async (format) => {
   const fileName = 'life-timeline'
