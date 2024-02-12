@@ -1,6 +1,6 @@
 export type LifeTimelineEvent = {
   id: string
-  type: 'education' | 'work'
+  type: LifeTimelineEventType
   date: string
   title: string
   subtitle: string
