@@ -1,12 +1,12 @@
 import { IndexedDB } from '@/api/IndexedDB'
 
-describe('Top page', () => {
+describe('Display life-timeline event items', () => {
   beforeEach(async () => {
     const db: IndexedDB = await IndexedDB.getSingleton()
     await db.deleteAll()
   })
 
-  it('should be /', () => {
+  it('Should be completed a display process.', () => {
     cy.visit('/')
 
     cy.url().should('include', '/')

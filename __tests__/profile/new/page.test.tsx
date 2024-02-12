@@ -22,7 +22,7 @@ describe('render registration screen', () => {
     await spy.mockClear()
   })
 
-  test('register lifetime-event', async () => {
+  test('The registration process should be completed, and the insert function in IndexedDB should be called once.', async () => {
     spy.mockReturnValue(Promise.resolve(true))
 
     render(<Page />)

@@ -4,8 +4,8 @@ import { IndexedDB } from '@/api/IndexedDB'
 type TestForm = { id: string; test: string }
 
 describe('IndexedDB Test', () => {
-  describe('get instance', () => {
-    test('the instance must be unique', async () => {
+  describe('getSingleton()', () => {
+    test('An instance must be unique.', async () => {
       const actual: IndexedDB = await IndexedDB.getSingleton()
       const expected: IndexedDB = await IndexedDB.getSingleton()
 
@@ -13,8 +13,8 @@ describe('IndexedDB Test', () => {
     })
   })
 
-  describe('insert', () => {
-    test('stored an item', async () => {
+  describe('insert()', () => {
+    test('Stored an item into IndexedDB.', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
       const form: TestForm = { id: 'test-id', test: 'hello' }
 

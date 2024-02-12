@@ -1,3 +1,7 @@
+/**
+ * Global mock methods.
+ */
+
 const intersectionObserverMock = () => ({
   observe: () => jest.fn(),
   unobserve: () => jest.fn(),

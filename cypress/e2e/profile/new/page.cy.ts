@@ -4,13 +4,13 @@ const screenshotOptions: Partial<Cypress.ScreenshotOptions> = {
   overwrite: true,
 }
 
-describe('Event register page', () => {
+describe('Register a life-timeline event item', () => {
   beforeEach(async () => {
     const db: IndexedDB = await IndexedDB.getSingleton()
     await db.deleteAll()
   })
 
-  it('should be input forms', () => {
+  it('Should be completed a registration process.', () => {
     cy.visit('/')
 
     cy.screenshot('before-added-event', screenshotOptions)

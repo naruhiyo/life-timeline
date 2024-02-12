@@ -4,7 +4,7 @@ import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 
 describe('LifeTimelineEventLogic Test', () => {
-  describe('create LifeTimelineEvent', () => {
+  describe('createLifeTimelineEvent()', () => {
     let db: IndexedDB
     let spy: jest.SpyInstance<Promise<boolean>, [form: unknown], any>
 
@@ -17,7 +17,7 @@ describe('LifeTimelineEventLogic Test', () => {
       await spy.mockClear()
     })
 
-    test('insert an event into indexed db`', async () => {
+    test('Inserted a life-timeline event into IndexedDB and returned `true`.', async () => {
       spy.mockImplementation(() => Promise.resolve(true))
 
       const testData: LifeTimelineEvent = {
@@ -36,7 +36,7 @@ describe('LifeTimelineEventLogic Test', () => {
       expect(actual).toEqual(true)
     })
 
-    test('failed to insert an event into indexed db`', async () => {
+    test('Failed to insert a life-timeline event into IndexedDB and returned `false`.', async () => {
       const db = await IndexedDB.getSingleton()
       spy.mockImplementation(() => Promise.resolve(false))
 
