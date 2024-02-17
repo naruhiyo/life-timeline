@@ -15,14 +15,11 @@ import {
   RadioGroup,
   Radio,
   useDisclosure,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
 } from '@nextui-org/react'
 import { useRouter, useParams } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
+import CompleteModal from '@/components/CompleteModal'
 import styles from '@/components/profile/new/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
@@ -33,7 +30,7 @@ export default function Page() {
     id: string
   } = useParams()
   // handle modal
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   // input form
   const [form, setForm] = useState({
     id: '',
@@ -52,10 +49,12 @@ export default function Page() {
   // submit event
   const handleSubmit = async () => {
     const logic = new LifeTimelineEventLogic()
+    onOpen()
   }
 
   // modal closed event
   const handleModalClosed = () => {
+    onClose()
     router.push('/')
   }
 
@@ -149,25 +148,11 @@ export default function Page() {
           </CardFooter>
         </Card>
 
-        <Modal
+        <CompleteModal
+          headerText=''
+          closeCallback={handleModalClosed}
           isOpen={isOpen}
-          onClose={handleModalClosed}
-          placement={'top'}
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className='flex flex-col gap-1'>登録完了</ModalHeader>
-                <ModalFooter>
-                  <Button color='danger' variant='light' onPress={onClose}>
-                    Close
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+        ></CompleteModal>
       </div>
     </main>
   )
