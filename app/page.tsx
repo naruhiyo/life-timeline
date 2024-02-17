@@ -18,7 +18,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
-import styles from '@/components/page.module.css'
+import styles from '@/components/style.module.css'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 
 const timelineItemMap: {

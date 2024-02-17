@@ -22,7 +22,7 @@ import {
 import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
-import styles from '@/components/profile/new/page.module.css'
+import styles from '@/components/style.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
 export default function Page(): JSX.Element {
