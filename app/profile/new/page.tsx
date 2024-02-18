@@ -167,6 +167,7 @@ export default function Page(): JSX.Element {
             <RadioGroup
               isRequired
               label='種別'
+              name='type'
               orientation='horizontal'
               value={form.type}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,6 +185,7 @@ export default function Page(): JSX.Element {
               isRequired
               type='date'
               label='日付'
+              name='date'
               placeholder='イベントの日付'
               value={form.date}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,6 +199,7 @@ export default function Page(): JSX.Element {
             <Input
               isRequired
               type='text'
+              name='title'
               label='イベントタイトル'
               placeholder='イベントのタイトル'
               value={form.title}
@@ -211,6 +214,7 @@ export default function Page(): JSX.Element {
             <Input
               isRequired
               type='text'
+              name='subtitle'
               label='イベントサブタイトル'
               placeholder='イベントのサブタイトル'
               value={form.subtitle}
@@ -226,6 +230,7 @@ export default function Page(): JSX.Element {
               isRequired
               minRows={8}
               label='詳細'
+              name='content'
               placeholder='イベントの詳細'
               value={form.content}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
