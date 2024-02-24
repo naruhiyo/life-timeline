@@ -1,7 +1,7 @@
 import domtoimage from 'dom-to-image'
 
 export class Downloader {
-  private readonly fileName = 'life-timeline'
+  private readonly fileName: string = "life-timeline";
 
   async download(targetElementId: string, format: string): Promise<boolean> {
     const targetElement = document.getElementById(targetElementId)
@@ -9,8 +9,8 @@ export class Downloader {
       console.error(`Could not get element to download: ${targetElementId}`)
       return false
     }
-    let downloadElement
-    let bgColor
+    let downloadElement: HTMLAnchorElement
+    let bgColor: string
     switch (format) {
       case 'svg':
         downloadElement = document.createElement('a')
