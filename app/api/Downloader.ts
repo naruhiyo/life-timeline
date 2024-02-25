@@ -3,6 +3,12 @@ import domtoimage from 'dom-to-image'
 export class Downloader {
   private readonly fileName: string = "life-timeline";
 
+  /**
+   * Downloads a file specified with the format
+   * @param targetElementId The id of the HTML element to download.
+   * @param format The format to download.
+   * @returns A Promise<boolean> indicating whether the download was successful.
+   */
   async download(targetElementId: string, format: string): Promise<boolean> {
     const targetElement = document.getElementById(targetElementId)
     if (targetElement == null) {
