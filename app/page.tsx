@@ -59,8 +59,6 @@ const downloadFormatItems: Array<{
   },
 ]
 
-const TARGET_DOWNLOAD_COMPONENT_ID = 'target-download-component-id'
-
 export default function Home() {
   const [items, setItems] = useState([] as LifeTimelineEvent[])
   const downloader: Downloader = new Downloader()
@@ -86,7 +84,7 @@ export default function Home() {
           <DropdownMenu
             aria-label='Dynamic Actions'
             items={downloadFormatItems}
-            onAction={(key) => downloader.download(TARGET_DOWNLOAD_COMPONENT_ID, key)}
+            onAction={(key) => downloader.download('target-download-component-id', key)}
           >
             {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
           </DropdownMenu>
@@ -100,7 +98,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <div id={TARGET_DOWNLOAD_COMPONENT_ID}>
+      <div id='target-download-component-id'>
         <VerticalTimeline lineColor=''>
           {items.map((item, index) => {
             const className: string = `vertical-timeline-element--${item.type}`
