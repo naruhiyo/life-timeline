@@ -1,7 +1,7 @@
 import domtoimage from 'dom-to-image'
 
 export class Downloader {
-  private readonly fileName: string = "life-timeline";
+  private readonly fileName: string = 'life-timeline'
 
   /**
    * Downloads a file specified with the format
