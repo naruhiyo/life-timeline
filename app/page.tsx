@@ -68,6 +68,18 @@ export default function Home() {
     setItems(await logic.getLifeTimelineEvent())
   }
 
+  const download = (key) => {
+    const downloader: Downloader = new Downloader()
+    const targetElement: HTMLElement | null = document.getElementById(
+      'target-download-component-id',
+    )
+    if (targetElement == null) {
+      console.error('Could not get element to download')
+      return false
+    }
+    downloader.download(targetElement, key)
+  }
+
   useEffect(() => {
     loadItems()
   }, [])
@@ -84,7 +96,7 @@ export default function Home() {
           <DropdownMenu
             aria-label='Dynamic Actions'
             items={downloadFormatItems}
-            onAction={(key) => downloader.download('target-download-component-id', key)}
+            onAction={(key) => download(key)}
           >
             {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
           </DropdownMenu>
