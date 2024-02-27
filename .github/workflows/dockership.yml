@@ -22,7 +22,7 @@ jobs:
       - uses: docker/metadata-action@v4
         id: meta
         with:
-          images: ghcr.io/${{ github.repository }}/cypress
+          images: ghcr.io/${{ github.repository }}/sandbox-cypress
           tags: |
             type=raw,value=latest
       - name: Build and Push a Docker Image
