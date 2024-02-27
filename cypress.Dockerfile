@@ -2,7 +2,6 @@ FROM cypress/included:cypress-13.6.3-node-20.10.0-chrome-121.0.6167.85-1-ff-118.
 
 WORKDIR /app
 
-# enable japanese font
 RUN apt update && \
     apt install -y wget unzip && \
     wget -O NotSansJP.zip https://fonts.google.com/download?family=Noto+Sans+JP && \
