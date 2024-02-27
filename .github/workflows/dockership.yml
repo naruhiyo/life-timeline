@@ -3,7 +3,7 @@ name: dockership
 on:
   push:
     branches:
-      - main
+      - sandbox/LT-57_add_dockership_no_modify_dockerfile
     paths:
       - 'cypress.Dockerfile'
   workflow_dispatch:
