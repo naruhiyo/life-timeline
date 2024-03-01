@@ -11,9 +11,7 @@ services:
     networks:
       lifetimeline_default:
   cypress:
-    build:
-      context: .
-      dockerfile: cypress.Dockerfile
+    image: ghcr.io/naruhiyo/life-timeline-cypress
     volumes:
       - .:/app
       - lifetimeline_node_modules:/app/node_modules
