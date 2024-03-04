@@ -70,7 +70,7 @@ describe('LifeTimelineEventLogic Test', () => {
       await spy.mockClear()
     })
 
-    test('Retrieve all lifetime-event items from IndexedDB and return them.', async () => {
+    test('Retrieve all life-timeline event items from IndexedDB and return them.', async () => {
       const db = await IndexedDB.getSingleton()
       spy.mockImplementation(() =>
         Promise.resolve([
@@ -110,6 +110,44 @@ describe('LifeTimelineEventLogic Test', () => {
 
       expect(db.selectAll).toHaveBeenCalledTimes(1)
       expect(actualList).toEqual([])
+    })
+  })
+
+  describe('deleteLifeTimelineEvent()', () => {
+    let db: IndexedDB
+    let spy: jest.SpyInstance<Promise<boolean>, [id: string], any>
+
+    beforeEach(async () => {
+      db = await IndexedDB.getSingleton()
+      spy = jest.spyOn(db, 'delete')
+    })
+
+    afterEach(async () => {
+      await spy.mockClear()
+    })
+
+    test('Delete a life-timeline event from IndexedDB and return `true`.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation((_: string) => Promise.resolve(true))
+
+      const testId = btoa(encodeURIComponent('test-id'))
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual = await logic.deleteLifeTimelineEvent(testId)
+
+      expect(db.delete).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual(true)
+    })
+
+    test('Failed to delete a life-timeline event from IndexedDB and returned `false`.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation((_: string) => Promise.resolve(false))
+
+      const testId = btoa(encodeURIComponent('test-id'))
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual = await logic.deleteLifeTimelineEvent(testId)
+
+      expect(db.delete).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual(false)
     })
   })
 })

@@ -7,7 +7,7 @@ jest.mock('next/navigation', () => ({
   useRouter() {},
 }))
 describe('render home screen', () => {
-  test('Display two lifetime-event items when the retrieve function is called once with IndexedDB.', async () => {
+  test('Display two life-timeline event items when the retrieve function is called once with IndexedDB.', async () => {
     const db = await IndexedDB.getSingleton()
     jest.spyOn(db, 'selectAll').mockImplementation(() =>
       Promise.resolve([
@@ -40,7 +40,7 @@ describe('render home screen', () => {
     expect(firstItem).toBeInTheDocument()
   })
 
-  test("Don't show lifetime-event", async () => {
+  test('Do not display life-timeline event items where the retrieve function returns an empty list.', async () => {
     const db = await IndexedDB.getSingleton()
     jest.spyOn(db, 'selectAll').mockImplementation(() => Promise.resolve([]))
 
