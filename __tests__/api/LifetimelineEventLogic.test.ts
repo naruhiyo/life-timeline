@@ -75,6 +75,14 @@ describe('LifeTimelineEventLogic Test', () => {
       spy.mockImplementation(() =>
         Promise.resolve([
           {
+            id: 'test-id2',
+            type: 'work',
+            date: '2021-12-31',
+            title: 'jest title 2',
+            subtitle: 'jest subtitle 2',
+            content: 'jest content 2',
+          },
+          {
             id: 'test-id',
             type: 'education',
             date: '2023-12-31',
@@ -90,6 +98,14 @@ describe('LifeTimelineEventLogic Test', () => {
 
       expect(db.selectAll).toHaveBeenCalledTimes(1)
       expect(actualList).toEqual([
+        {
+          id: 'test-id2',
+          type: 'work',
+          date: '2021-12-31',
+          title: 'jest title 2',
+          subtitle: 'jest subtitle 2',
+          content: 'jest content 2',
+        },
         {
           id: 'test-id',
           type: 'education',

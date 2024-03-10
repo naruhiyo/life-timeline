@@ -39,9 +39,12 @@ export class IndexedDB {
 
         if (!isExist) {
           // Create Object store
-          IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
+          const lifeTimelineStore = IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
             keyPath: 'id',
           })
+
+          // Create index
+          lifeTimelineStore.createIndex('date_index', 'date')
         }
         resolve()
       }
@@ -110,6 +113,7 @@ export class IndexedDB {
       )
       const lifeTimelineStore: IDBRequest<T[]> = transaction
         .objectStore(IndexedDBConfig.STORE_NAME)
+        .index('date_index')
         .getAll()
 
       lifeTimelineStore.onsuccess = (e: Event): void => {

@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto'
 import { IndexedDB } from '@/api/IndexedDB'
 
-type TestForm = { id: string; test: string }
+type TestForm = { id: string; test: string; date: string }
 
 describe('IndexedDB Test', () => {
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe('IndexedDB Test', () => {
   describe('insert()', () => {
     test('Stored an item into IndexedDB.', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
-      const form: TestForm = { id: 'test-id', test: 'hello' }
+      const form: TestForm = { id: 'test-id', test: 'hello', date: '2024-01-01' }
 
       const actual = await db.insert<TestForm>(form)
 
@@ -32,30 +32,34 @@ describe('IndexedDB Test', () => {
       expect(actualItems[0]).toEqual({
         id: 'test-id',
         test: 'hello',
+        date: '2024-01-01',
       })
     })
   })
 
   describe('selectAll()', () => {
-    test('Obtain three life-timeline event items when the method is called once.', async () => {
+    test('Obtain three life-timeline event items by ordering them based on `date` when the method is called once."', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
-      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1' })
-      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2' })
-      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3' })
+      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1', date: '2024-03-01' })
+      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2', date: '2024-02-01' })
+      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3', date: '2024-01-01' })
 
       const actualItems: TestForm[] = await db.selectAll<TestForm>()
       expect(actualItems).toEqual([
         {
-          id: 'test-id1',
-          test: 'hello1',
+          id: 'test-id3',
+          test: 'hello3',
+          date: '2024-01-01',
         },
         {
           id: 'test-id2',
           test: 'hello2',
+          date: '2024-02-01',
         },
         {
-          id: 'test-id3',
-          test: 'hello3',
+          id: 'test-id1',
+          test: 'hello1',
+          date: '2024-03-01',
         },
       ])
     })
@@ -64,7 +68,7 @@ describe('IndexedDB Test', () => {
   describe('delete()', () => {
     test('Delete a life-timeline event item from IndexedDB when the method is called once.', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
-      await db.insert<TestForm>({ id: 'test-id', test: 'hello1' })
+      await db.insert<TestForm>({ id: 'test-id', test: 'hello1', date: '2024-01-01' })
 
       const actual = await db.delete('test-id')
 
@@ -78,9 +82,9 @@ describe('IndexedDB Test', () => {
   describe('deleteAll()', () => {
     test('Delete three life-timeline event items from IndexedDB when the method is called once.', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
-      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1' })
-      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2' })
-      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3' })
+      await db.insert<TestForm>({ id: 'test-id1', test: 'hello1', date: '2024-01-01' })
+      await db.insert<TestForm>({ id: 'test-id2', test: 'hello2', date: '2024-02-01' })
+      await db.insert<TestForm>({ id: 'test-id3', test: 'hello3', date: '2024-03-01' })
 
       await db.deleteAll()
 
