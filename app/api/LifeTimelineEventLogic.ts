@@ -14,6 +14,17 @@ export class LifeTimelineEventLogic {
   }
 
   /**
+   * Update life-timeline event
+   *
+   * @param form {LifeTimelineEvent}
+   * @returns {Promise<boolean>}
+   */
+  async updateLifeTimelineEvent(form: LifeTimelineEvent): Promise<boolean> {
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    return await db.update<LifeTimelineEvent>(form)
+  }
+
+  /**
    * Get life-timeline event
    * @returns {Promise<LifeTimelineEvent>}
    */

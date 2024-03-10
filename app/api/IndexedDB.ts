@@ -96,6 +96,36 @@ export class IndexedDB {
   }
 
   /**
+   * Update record.
+   * @param form A definition of record
+   * @returns {Promise<boolean>}
+   */
+  async update<T>(form: T): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (IndexedDB.db === undefined || IndexedDB.db === null) {
+        console.warn("Update failed because of the db doesn't connected.")
+        reject(false)
+      }
+
+      // start transaction
+      const transaction = IndexedDB.db!.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
+
+      // save to store
+      const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+      lifeTimelineStore.put(form)
+
+      transaction.oncomplete = (_: Event) => {
+        resolve(true)
+      }
+
+      transaction.onerror = (e: Event) => {
+        console.warn('transaction error', e.target)
+        reject(false)
+      }
+    })
+  }
+
+  /**
    * Get all records
    *
    * @returns {Promise<T[]>}
