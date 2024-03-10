@@ -20,7 +20,7 @@ import { useRouter, useParams } from 'next/navigation' // next/router ではな�
 import { useState, useEffect } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
-import styles from '@/components/profile/new/page.module.css'
+import styles from '@/components/profile/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
 export default function Page() {
