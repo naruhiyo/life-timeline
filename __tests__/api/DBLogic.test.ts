@@ -4,7 +4,7 @@ import { IndexedDB } from '@/api/IndexedDB'
 
 describe('DBLogic Test', () => {
   describe('close()', () => {
-    test('IndexedDB is closed when the method is called once.', async () => {
+    test('close() method should close IndexedDB once.', async () => {
       const db = await IndexedDB.getSingleton()
       jest.spyOn(db, 'closeDB').mockImplementation(() => Promise.resolve())
 
