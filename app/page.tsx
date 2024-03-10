@@ -136,6 +136,9 @@ export default function Home(): JSX.Element {
                   iconStyle={{ background: color, color: '#222' }}
                   icon={icon}
                   key={index}
+                  onTimelineElementClick={() => {
+                    redirectEdit(item.id)
+                  }}
                 >
                   <h3 className='vertical-timeline-element-title'>{item.title}</h3>
                   <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
