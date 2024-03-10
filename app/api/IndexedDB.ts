@@ -129,6 +129,36 @@ export class IndexedDB {
   }
 
   /**
+   * Get a record by ID
+   *
+   * @param id The ID of the record to retrieve
+   * @returns {Promise<T | undefined>} The record matching the given ID, or undefined if not found
+   */
+  async select<T>(id: string): Promise<T | undefined> {
+    return new Promise((resolve, reject) => {
+      if (IndexedDB.db === undefined || IndexedDB.db === null) {
+        console.warn('Select failed because the database is not connected.')
+        return reject(undefined)
+      }
+
+      const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readonly')
+      const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+
+      const request = lifeTimelineStore.get(id)
+
+      request.onsuccess = () => {
+        const item: T | undefined = request.result
+        resolve(item)
+      }
+
+      request.onerror = (e: Event) => {
+        console.error('Selection error:', e.target)
+        reject(undefined)
+      }
+    })
+  }
+
+  /**
    * Close DB
    *
    * @returns {Promise<void>}

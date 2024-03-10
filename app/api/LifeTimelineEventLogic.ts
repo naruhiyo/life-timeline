@@ -14,10 +14,30 @@ export class LifeTimelineEventLogic {
   }
 
   /**
+   * Get life-timeline event
+   * @returns {Promise<LifeTimelineEvent>}
+   */
+  async getLifeTimelineEvent(encodedId: string): Promise<LifeTimelineEvent> {
+    const decodedId: string = atob(encodedId)
+    const db: IndexedDB = await IndexedDB.getSingleton()
+    let item: LifeTimelineEvent | undefined = await db.select<LifeTimelineEvent>(decodedId)
+    if (item == undefined) {
+      item = {
+        id: decodedId,
+        type: 'education',
+        date: '',
+        title: '',
+        content: '',
+      }
+    }
+    return item
+  }
+
+  /**
    * Get all life-timeline events
    * @returns {Promise<LifeTimelineEvent[]>}
    */
-  async getLifeTimelineEvent(): Promise<LifeTimelineEvent[]> {
+  async getAllLifeTimelineEvents(): Promise<LifeTimelineEvent[]> {
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.selectAll<LifeTimelineEvent>()
   }

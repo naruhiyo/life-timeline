@@ -55,7 +55,7 @@ describe('LifeTimelineEventLogic Test', () => {
     })
   })
 
-  describe('getLifeTimelineEvent()', () => {
+  describe('getAllLifeTimelineEvents()', () => {
     let db: IndexedDB
     let spy: jest.SpyInstance<Promise<unknown[]>, [], any>
 
@@ -90,7 +90,7 @@ describe('LifeTimelineEventLogic Test', () => {
       )
 
       const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
-      const actualList: LifeTimelineEvent[] = await logic.getLifeTimelineEvent()
+      const actualList: LifeTimelineEvent[] = await logic.getAllLifeTimelineEvents()
 
       expect(db.selectAll).toHaveBeenCalledTimes(1)
       expect(actualList).toEqual([
@@ -116,7 +116,7 @@ describe('LifeTimelineEventLogic Test', () => {
       spy.mockImplementation(() => Promise.resolve([]))
 
       const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
-      const actualList: LifeTimelineEvent[] = await logic.getLifeTimelineEvent()
+      const actualList: LifeTimelineEvent[] = await logic.getAllLifeTimelineEvents()
 
       expect(db.selectAll).toHaveBeenCalledTimes(1)
       expect(actualList).toEqual([])
