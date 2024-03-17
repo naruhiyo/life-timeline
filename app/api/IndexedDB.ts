@@ -1,59 +1,39 @@
+// eslint-disable-next-line import/named
+import { IDBPDatabase, openDB } from 'idb'
 import { IndexedDBConfig } from '@/api/IndexedDBConfig'
 
 export type LifeTimelineDB = IDBDatabase | undefined
 
 export class IndexedDB {
   private static instance: IndexedDB
-  private static db: LifeTimelineDB
+  private static db: IDBPDatabase
 
   private constructor() {
     IndexedDB.init()
   }
 
-  private static init(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // DB作成
-      const request: IDBOpenDBRequest = window.indexedDB.open(
-        IndexedDBConfig.DB_NAME,
-        IndexedDBConfig.VERSION,
-      )
+  private static async init(): Promise<void> {
+    // DB作成
+    try {
+      const db: IDBPDatabase = await openDB(IndexedDBConfig.DB_NAME, IndexedDBConfig.VERSION, {
+        upgrade(db: IDBPDatabase) {
+          const isExist = db.objectStoreNames.contains(IndexedDBConfig.STORE_NAME)
 
-      /**
-       * Success to connect db
-       */
-      request.onsuccess = (): void => {
-        IndexedDB.db = request.result
-        resolve()
-      }
+          if (!isExist) {
+            // Create Object store
+            const lifeTimelineStore = db.createObjectStore(IndexedDBConfig.STORE_NAME, {
+              keyPath: 'id',
+            })
 
-      /**
-       * Upgrade Event
-       * - The event has occured if a version updated.
-       *
-       * @param e {IDBVersionChangeEvent}
-       */
-      request.onupgradeneeded = (e: IDBVersionChangeEvent): void => {
-        IndexedDB.db = (e.target as IDBOpenDBRequest).result
-
-        const isExist = IndexedDB.db.objectStoreNames.contains(IndexedDBConfig.STORE_NAME)
-
-        if (!isExist) {
-          // Create Object store
-          const lifeTimelineStore = IndexedDB.db.createObjectStore(IndexedDBConfig.STORE_NAME, {
-            keyPath: 'id',
-          })
-
-          // Create index
-          lifeTimelineStore.createIndex('date_index', 'date')
-        }
-        resolve()
-      }
-
-      request.onerror = (e: Event): void => {
-        console.error('Error caused', e.target)
-        reject()
-      }
-    })
+            // Create index
+            lifeTimelineStore.createIndex('date_index', 'date')
+          }
+        },
+      })
+      IndexedDB.db = db
+    } catch (err) {
+      console.error('Error caused', err)
+    }
   }
 
   static async getSingleton(): Promise<IndexedDB> {
@@ -71,28 +51,24 @@ export class IndexedDB {
    * @returns {Promise<boolean>}
    */
   async insert<T>(form: T): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("Insert failed because of the db doesn't connected.")
-        reject(false)
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn("Insert failed because of the db doesn't connected.")
+      return false
+    }
 
+    try {
       // start transaction
-      const transaction = IndexedDB.db!.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
+      const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
 
       // save to store
       const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
-      lifeTimelineStore.add(form)
-
-      transaction.oncomplete = (_: Event) => {
-        resolve(true)
-      }
-
-      transaction.onerror = (e: Event) => {
-        console.warn('transaction error', e.target)
-        reject(false)
-      }
-    })
+      await lifeTimelineStore.add(form)
+      await transaction.done
+      return true
+    } catch (err) {
+      console.warn('transaction error', err)
+      return false
+    }
   }
 
   /**
@@ -101,31 +77,21 @@ export class IndexedDB {
    * @returns {Promise<T[]>}
    */
   async selectAll<T>(): Promise<T[]> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("selectAll failed because of the db doesn't connected.")
-        return resolve([])
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn("selectAll failed because of the db doesn't connected.")
+      return []
+    }
 
-      const transaction: IDBTransaction = IndexedDB.db.transaction(
-        IndexedDBConfig.STORE_NAME,
-        'readonly',
-      )
-      const lifeTimelineStore: IDBRequest<T[]> = transaction
-        .objectStore(IndexedDBConfig.STORE_NAME)
-        .index('date_index')
-        .getAll()
-
-      lifeTimelineStore.onsuccess = (e: Event): void => {
-        const items: T[] = (e.target as IDBRequest<T[]>).result
-        resolve(items)
-      }
-
-      lifeTimelineStore.onerror = (e: Event) => {
-        console.warn('transaction error', e.target)
-        reject([])
-      }
-    })
+    try {
+      const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readonly')
+      const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+      const items = await lifeTimelineStore.index('date_index').getAll()
+      await transaction.done
+      return items
+    } catch (err) {
+      console.warn('transaction error', err)
+      return []
+    }
   }
 
   /**
@@ -146,28 +112,24 @@ export class IndexedDB {
    * @returns {Promise<boolean>}
    */
   async delete(id: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("SelectAll failed because of the db doesn't connected.")
-        return resolve(false)
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn("SelectAll failed because of the db doesn't connected.")
+      return false
+    }
 
+    try {
       // start transaction
-      const transaction = IndexedDB.db!.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
+      const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
 
       // delete from store
       const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
-      lifeTimelineStore.delete(id)
-
-      transaction.oncomplete = (_: Event) => {
-        resolve(true)
-      }
-
-      transaction.onerror = (e: Event) => {
-        console.error('delete record error', e)
-        reject(false)
-      }
-    })
+      await lifeTimelineStore.delete(id)
+      await transaction.done
+      return true
+    } catch (err) {
+      console.error('delete record error', err)
+      return false
+    }
   }
 
   /**
@@ -175,28 +137,20 @@ export class IndexedDB {
    * @returns {Promise<void>}
    */
   async deleteAll(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("Insert failed because of the db doesn't connected.")
-        return resolve()
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn("Insert failed because of the db doesn't connected.")
+      return
+    }
 
-      const transaction: IDBTransaction = IndexedDB.db.transaction(
-        IndexedDBConfig.STORE_NAME,
-        'readwrite',
-      )
-      const lifeTimelineStore: IDBObjectStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
+    try {
+      const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
+      const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
 
-      lifeTimelineStore.clear()
-
-      transaction.oncomplete = (_: Event) => {
-        resolve()
-      }
-
-      transaction.onerror = (e: Event) => {
-        console.error('error', e.target)
-        reject()
-      }
-    })
+      await lifeTimelineStore.clear()
+      await transaction.done
+    } catch (err) {
+      console.error('error', err)
+    }
+    return
   }
 }

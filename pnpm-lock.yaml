@@ -79,6 +79,9 @@ devDependencies:
   fake-indexeddb:
     specifier: ^5.0.2
     version: 5.0.2
+  idb:
+    specifier: ^8.0.0
+    version: 8.0.0
   jest:
     specifier: ^29.7.0
     version: 29.7.0(@types/node@20.10.5)
@@ -5826,6 +5829,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
+    dev: true
+
+  /idb@8.0.0:
+    resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
     dev: true
 
   /ieee754@1.2.1:
