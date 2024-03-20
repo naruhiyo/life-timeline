@@ -1,0 +1,24 @@
+# git
+.github
+
+# application
+.next
+.swc
+cypress
+
+# vscode
+.vscode
+
+# packages
+node_modules
+
+# docker
+.dockerignore
+cypress.Dockerfile
+Dockerfile
+docker-compose.yml
+
+# config
+.prettierrc
+.prettierignore
+README.md

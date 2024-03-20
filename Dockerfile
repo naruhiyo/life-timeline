@@ -1,6 +1,10 @@
 FROM node:20.10-alpine
 
-WORKDIR /app/
-COPY ./package.json ./package-lock.json ./pnpm-lock.yaml ./.npmrc ./
-RUN yarn global add pnpm
-RUN pnpm install
+WORKDIR /home/node
+COPY --chown=node:node . /home/node/
+RUN yarn global add pnpm &&\
+  pnpm install --frozen-lockfile
+
+USER node
+EXPOSE 3000
+CMD ["pnpm", "dev"]

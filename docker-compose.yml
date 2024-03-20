@@ -1,13 +1,22 @@
 services:
+  a:
+    build:
+      context: .
+      dockerfile: sample.Dockerfile
+    environment:
+      HOST_FQDN: web
+    networks:
+      lifetimeline_default:
+
   web:
     build:
       context: .
     ports:
       - '3000:3000'
     volumes:
-      - .:/app
-      - lifetimeline_node_modules:/app/node_modules
-    command: sh -c "pnpm run dev"
+      - ./package.json:/home/node/package.json
+      - lifetimeline_node_modules:/home/node/node_modules
+    command: pnpm dev
     networks:
       lifetimeline_default:
   cypress:
