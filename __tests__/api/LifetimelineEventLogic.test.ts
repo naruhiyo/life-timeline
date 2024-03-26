@@ -55,6 +55,114 @@ describe('LifeTimelineEventLogic Test', () => {
     })
   })
 
+  describe('updateLifeTimelineEvent()', () => {
+    let db: IndexedDB
+    let spy: jest.SpyInstance<Promise<boolean>, [form: unknown], any>
+
+    beforeEach(async () => {
+      db = await IndexedDB.getSingleton()
+      spy = jest.spyOn(db, 'update')
+    })
+
+    afterEach(async () => {
+      await spy.mockClear()
+    })
+
+    test('Update a life-timeline event in IndexedDB and returned `true`.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation(() => Promise.resolve(true))
+
+      const testData: LifeTimelineEvent = {
+        id: 'test-id',
+        type: 'education',
+        date: '2023-12-31',
+        title: 'jest title',
+        content: 'jest content',
+      }
+
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual: boolean = await logic.updateLifeTimelineEvent(testData)
+
+      expect(db.update).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual(true)
+    })
+
+    test('Failed to update a life-timeline event in IndexedDB and returned `false`.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation(() => Promise.resolve(false))
+
+      const testData: LifeTimelineEvent = {
+        id: 'test-id',
+        type: 'education',
+        date: '2023-12-31',
+        title: 'jest title',
+        content: 'jest content',
+      }
+
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual: boolean = await logic.updateLifeTimelineEvent(testData)
+
+      expect(db.update).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual(false)
+    })
+  })
+
+  describe('getLifeTimelineEvent()', () => {
+    let db: IndexedDB
+    let spy: jest.SpyInstance<Promise<unknown[]>, [], any>
+
+    beforeEach(async () => {
+      db = await IndexedDB.getSingleton()
+      spy = jest.spyOn(db, 'select')
+    })
+
+    afterEach(async () => {
+      await spy.mockClear()
+    })
+
+    test('Retrieve a life-timeline event item from IndexedDB and return it.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation(() =>
+        Promise.resolve({
+          id: 'test-id',
+          type: 'work',
+          date: '2021-12-31',
+          title: 'jest title',
+          content: 'jest content',
+        }),
+      )
+
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual: LifeTimelineEvent = await logic.getLifeTimelineEvent('dGVzdC1pZA==')
+
+      expect(db.select).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual({
+        id: 'test-id',
+        type: 'work',
+        date: '2021-12-31',
+        title: 'jest title',
+        content: 'jest content',
+      })
+    })
+
+    test('Retrieve an empty data from IndexedDB and return it.', async () => {
+      const db = await IndexedDB.getSingleton()
+      spy.mockImplementation(() => Promise.resolve(undefined))
+
+      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+      const actual: LifeTimelineEvent = await logic.getLifeTimelineEvent('dGVzdC1pZA==')
+
+      expect(db.select).toHaveBeenCalledTimes(1)
+      expect(actual).toEqual({
+        id: 'test-id',
+        type: 'education',
+        date: '',
+        title: '',
+        content: '',
+      })
+    })
+  })
+
   describe('getAllLifeTimelineEvents()', () => {
     let db: IndexedDB
     let spy: jest.SpyInstance<Promise<unknown[]>, [], any>

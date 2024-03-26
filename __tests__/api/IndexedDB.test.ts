@@ -37,6 +37,27 @@ describe('IndexedDB Test', () => {
     })
   })
 
+  describe('update()', () => {
+    test('Update an item in IndexedDB', async () => {
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      const initialForm: TestForm = { id: 'test-id', test: 'hello', date: '2024-01-01' }
+
+      await db.insert<TestForm>(initialForm)
+
+      const secondForm: TestForm = { id: 'test-id', test: 'world', date: '2024-01-01' }
+
+      const actual = await db.update<TestForm>(secondForm)
+      const actualItem: TestForm | undefined = await db.select<TestForm>(secondForm.id)
+
+      expect(actual).toBe(true)
+      expect(actualItem).toEqual({
+        id: 'test-id',
+        test: 'world',
+        date: '2024-01-01',
+      })
+    })
+  })
+
   describe('selectAll()', () => {
     test('Obtain three life-timeline event items by ordering them based on `date` when the method is called once."', async () => {
       const db: IndexedDB = await IndexedDB.getSingleton()
@@ -62,6 +83,29 @@ describe('IndexedDB Test', () => {
           date: '2024-03-01',
         },
       ])
+    })
+  })
+
+  describe('select()', () => {
+    test('Obtain the life-timeline event item which is specified with id.', async () => {
+      const db: IndexedDB = await IndexedDB.getSingleton()
+      const testForm1: TestForm = { id: 'test-id1', test: 'hello1', date: '2024-01-01' }
+      const testForm2: TestForm = { id: 'test-id2', test: 'hello2', date: '2024-02-01' }
+      await db.insert<TestForm>(testForm1)
+      await db.insert<TestForm>(testForm2)
+
+      const actualItem1: TestForm | undefined = await db.select<TestForm>(testForm1.id)
+      const actualItem2: TestForm | undefined = await db.select<TestForm>(testForm2.id)
+      expect(actualItem1).toEqual({
+        id: 'test-id1',
+        test: 'hello1',
+        date: '2024-01-01',
+      })
+      expect(actualItem2).toEqual({
+        id: 'test-id2',
+        test: 'hello2',
+        date: '2024-02-01',
+      })
     })
   })
 
