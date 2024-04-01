@@ -30,7 +30,8 @@ export default function Page() {
     id: string
   } = useParams()
   // handle modal
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const disclosure = useDisclosure()
+  let isModalOpen: boolean = disclosure.isOpen
   // input form
   const [form, setForm] = useState({
     id: '',
@@ -49,12 +50,12 @@ export default function Page() {
   // submit event
   const handleSubmit = async () => {
     const logic = new LifeTimelineEventLogic()
-    onOpen()
+    isModalOpen = true
   }
 
   // modal closed event
   const handleModalClosed = () => {
-    onClose()
+    isModalOpen = false
     router.push('/')
   }
 
@@ -151,7 +152,7 @@ export default function Page() {
         <CompleteModal
           headerText=''
           closeCallback={handleModalClosed}
-          isOpen={isOpen}
+          isOpen={isModalOpen}
         ></CompleteModal>
       </div>
     </main>

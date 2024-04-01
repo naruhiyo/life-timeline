@@ -26,7 +26,8 @@ export default function Page(): JSX.Element {
   // handle routing
   const router = useRouter()
   // handle modal
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const disclosure = useDisclosure()
+  let isModalOpen: boolean = disclosure.isOpen
   // input form
   const [form, setForm] = useState({
     id: crypto.randomUUID(),
@@ -48,13 +49,13 @@ export default function Page(): JSX.Element {
     const isCreated: boolean = await logic.createLifeTimelineEvent(form)
 
     if (isCreated) {
-      onOpen()
+      isModalOpen = true
     }
   }
 
   // modal closed event
   const handleModalClose = () => {
-    onClose()
+    isModalOpen = false
     router.push('/')
   }
 
@@ -134,7 +135,7 @@ export default function Page(): JSX.Element {
         <CompleteModal
           headerText='登録完了'
           closeCallback={handleModalClose}
-          isOpen={isOpen}
+          isOpen={isModalOpen}
         ></CompleteModal>
       </div>
     </main>
