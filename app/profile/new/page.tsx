@@ -26,8 +26,7 @@ export default function Page(): JSX.Element {
   // handle routing
   const router = useRouter()
   // handle modal
-  const disclosure = useDisclosure()
-  let isModalOpen: boolean = disclosure.isOpen
+  let [isModalOpen, setIsModalOpen] = useState(false)
   // input form
   const [form, setForm] = useState({
     id: crypto.randomUUID(),
@@ -49,13 +48,13 @@ export default function Page(): JSX.Element {
     const isCreated: boolean = await logic.createLifeTimelineEvent(form)
 
     if (isCreated) {
-      isModalOpen = true
+      setIsModalOpen(true)
     }
   }
 
   // modal closed event
   const handleModalClose = () => {
-    isModalOpen = false
+    setIsModalOpen(false)
     router.push('/')
   }
 
