@@ -13,7 +13,6 @@ import {
   Button,
   RadioGroup,
   Radio,
-  useDisclosure,
 } from '@nextui-org/react'
 import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
@@ -23,7 +22,6 @@ import styles from '@/components/profile/new/page.module.css'
 import {
   LifeTimelineEvent,
   LifeTimelineEventValid,
-  FormValidation,
   FormKeys,
   LifeTimelineEventType,
 } from '@/types/LifeTimelineEvent'
@@ -39,7 +37,6 @@ export default function Page(): JSX.Element {
     type: 'education',
     date: '',
     title: '',
-    subtitle: '',
     content: '',
   } as LifeTimelineEvent)
 
@@ -54,10 +51,6 @@ export default function Page(): JSX.Element {
       message: '',
     },
     title: {
-      invalid: false,
-      message: '',
-    },
-    subtitle: {
       invalid: false,
       message: '',
     },
@@ -209,21 +202,6 @@ export default function Page(): JSX.Element {
               }}
               isInvalid={validation.title.invalid}
               errorMessage={validation.title.message}
-            />
-
-            <Input
-              isRequired
-              type='text'
-              name='subtitle'
-              label='イベントサブタイトル'
-              placeholder='イベントのサブタイトル'
-              value={form.subtitle}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleValue('subtitle', e.target.value)
-                handleValidation('subtitle', e.target.value, '入力してください')
-              }}
-              isInvalid={validation.subtitle.invalid}
-              errorMessage={validation.subtitle.message}
             />
 
             <Textarea

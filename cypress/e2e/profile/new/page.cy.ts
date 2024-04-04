@@ -31,12 +31,11 @@ describe('Register a life-timeline event item', () => {
     const year = now.getFullYear()
     const month = (now.getMonth() + 1).toString().padStart(2, '0')
     const day = now.getDate().toString().padStart(2, '0')
-    cy.get('input[name="date"]').type(`${year}-${month}-${day}`)
+    cy.get('input[type="date"]').type(`${year}-${month}-${day}`)
 
-    cy.get('input[name="title"]').type('cypress-test-event')
-    cy.get('input[name="subtitle"]').type('cypress-sub-event')
+    cy.get('input[type="text"]').type('cypress-test-event')
 
-    cy.get('textarea[name="content"]').first().type('hello world from cypress!')
+    cy.get('textarea').first().type('hello world from cypress!')
 
     cy.screenshot('after-input', screenshotOptions)
 

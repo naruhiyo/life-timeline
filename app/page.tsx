@@ -141,7 +141,6 @@ export default function Home(): JSX.Element {
                   }}
                 >
                   <h3 className='vertical-timeline-element-title'>{item.title}</h3>
-                  <h4 className='vertical-timeline-element-subtitle'>{item.subtitle}</h4>
                   <p>{item.content}</p>
                 </VerticalTimelineElement>
               )

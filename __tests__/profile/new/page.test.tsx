@@ -38,9 +38,6 @@ describe('render registration screen', () => {
     fireEvent.change(await screen.findByLabelText('イベントタイトル'), {
       target: { value: 'test title' },
     })
-    fireEvent.change(await screen.findByLabelText('イベントサブタイトル'), {
-      target: { value: 'test subtitle' },
-    })
     fireEvent.change(await screen.findByLabelText('詳細'), { target: { value: 'test contents' } })
     fireEvent.click(await screen.findByRole('button', { name: '保存する' }))
 

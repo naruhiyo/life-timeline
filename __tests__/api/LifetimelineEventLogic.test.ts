@@ -25,7 +25,6 @@ describe('LifeTimelineEventLogic Test', () => {
         type: 'education',
         date: '2023-12-31',
         title: 'jest title',
-        subtitle: 'jest subtitle',
         content: 'jest content',
       }
 
@@ -45,7 +44,6 @@ describe('LifeTimelineEventLogic Test', () => {
         type: 'education',
         date: '2023-12-31',
         title: 'jest title',
-        subtitle: 'jest subtitle',
         content: 'jest content',
       }
 
@@ -79,7 +77,6 @@ describe('LifeTimelineEventLogic Test', () => {
             type: 'work',
             date: '2021-12-31',
             title: 'jest title 2',
-            subtitle: 'jest subtitle 2',
             content: 'jest content 2',
           },
           {
@@ -87,7 +84,6 @@ describe('LifeTimelineEventLogic Test', () => {
             type: 'education',
             date: '2023-12-31',
             title: 'jest title',
-            subtitle: 'jest subtitle',
             content: 'jest content',
           },
         ]),
@@ -103,7 +99,6 @@ describe('LifeTimelineEventLogic Test', () => {
           type: 'work',
           date: '2021-12-31',
           title: 'jest title 2',
-          subtitle: 'jest subtitle 2',
           content: 'jest content 2',
         },
         {
@@ -111,7 +106,6 @@ describe('LifeTimelineEventLogic Test', () => {
           type: 'education',
           date: '2023-12-31',
           title: 'jest title',
-          subtitle: 'jest subtitle',
           content: 'jest content',
         },
       ])
