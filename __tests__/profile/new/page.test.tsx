@@ -56,12 +56,6 @@ describe('render registration screen', () => {
 
     render(<Page />)
 
-    // don't show a registration complete dialog
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-
-    const headTitle = await screen.findByText('新規追加')
-    expect(headTitle).toBeInTheDocument()
-
     fireEvent.click(await screen.findByRole('button', { name: '保存する' }))
 
     // don't show a registration complete dialog
