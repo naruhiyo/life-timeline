@@ -101,7 +101,7 @@ export default function Page(): JSX.Element {
   const handleSubmit = async () => {
     const validationKeys: FormKeys[] = Object.keys(validation) as FormKeys[]
 
-    let isValid = true
+    let isInvalid = true
 
     // check all input validation
     let invalidForm: Partial<LifeTimelineEventValid> = {}
@@ -116,7 +116,7 @@ export default function Page(): JSX.Element {
       }
 
       if (invalid) {
-        isValid = false
+        isInvalid = true
         invalidForm[validationKey] = {
           invalid: invalid,
           message: message,
@@ -124,7 +124,7 @@ export default function Page(): JSX.Element {
       }
     })
 
-    if (isValid) {
+    if (!isInvalid) {
       const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
       const isCreated: boolean = await logic.createLifeTimelineEvent(form)
       if (isCreated) {
