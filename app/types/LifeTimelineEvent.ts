@@ -15,7 +15,7 @@ export type LifeTimelineEventValid = {
 
 export type FormKeys = 'type' | 'date' | 'title' | 'content'
 export type FormValidation = {
-  invalid: boolean
+  isInvalid: boolean
   message: string
 }
 export type LifeTimelineEventType = 'education' | 'work'

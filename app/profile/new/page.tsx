@@ -43,43 +43,22 @@ export default function Page(): JSX.Element {
   // validation
   const [validation, setValidation] = useState({
     type: {
-      invalid: false,
+      isInvalid: false,
       message: '',
     },
     date: {
-      invalid: false,
+      isInvalid: false,
       message: '',
     },
     title: {
-      invalid: false,
+      isInvalid: false,
       message: '',
     },
     content: {
-      invalid: false,
+      isInvalid: false,
       message: '',
     },
   } as LifeTimelineEventValid)
-
-  // check input value
-  const handleValidation = (formKey: FormKeys, value: string, message: string) => {
-    let invalid: boolean = true
-
-    if (value.length > 0) {
-      invalid = false
-      message = ''
-    }
-
-    const validState: Partial<LifeTimelineEventValid> = {}
-    validState[formKey] = {
-      invalid: invalid,
-      message: message,
-    }
-
-    setValidation({
-      ...validation,
-      ...validState,
-    })
-  }
 
   // change value event
   const handleValue = (formKey: FormKeys, value: string) => {
@@ -97,44 +76,52 @@ export default function Page(): JSX.Element {
     })
   }
 
-  // submit event
-  const handleSubmit = async () => {
+  // check all input validation
+  const isInvalidForm = (): boolean => {
+    let isInvalidForm = false
     const validationKeys: FormKeys[] = Object.keys(validation) as FormKeys[]
+    const validationForm: Partial<LifeTimelineEventValid> = {}
 
-    let isInvalid = true
-
-    // check all input validation
-    let invalidForm: Partial<LifeTimelineEventValid> = {}
+    // reset validation
     validationKeys.forEach((validationKey: FormKeys) => {
-      let invalid: boolean = true
-      let message: string = `入力してください`
-      const value: string = form[validationKey]
-
-      if (value.length > 0) {
-        invalid = false
-        message = ''
-      }
-
-      if (invalid) {
-        isInvalid = true
-        invalidForm[validationKey] = {
-          invalid: invalid,
-          message: message,
-        }
+      validationForm[validationKey] = {
+        isInvalid: false,
+        message: ``,
       }
     })
 
-    if (!isInvalid) {
-      const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
-      const isCreated: boolean = await logic.createLifeTimelineEvent(form)
-      if (isCreated) {
-        setIsModalOpen(true)
+    // check validation
+    validationKeys.forEach((validationKey: FormKeys) => {
+      const value: string = form[validationKey]
+
+      if (value.length < 1) {
+        validationForm[validationKey] = {
+          isInvalid: true,
+          message: `入力してください`,
+        }
+        isInvalidForm = true
       }
-    } else {
-      setValidation({
-        ...validation,
-        ...invalidForm,
-      })
+    })
+
+    setValidation({
+      ...validation,
+      ...validationForm,
+    })
+    return isInvalidForm
+  }
+
+  // submit event
+  const handleSubmit = async () => {
+    // validation
+    const isInvalid = isInvalidForm()
+    if (isInvalid) {
+      return
+    }
+
+    const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
+    const isCreated: boolean = await logic.createLifeTimelineEvent(form)
+    if (isCreated) {
+      setIsModalOpen(true)
     }
   }
 
@@ -165,9 +152,8 @@ export default function Page(): JSX.Element {
               value={form.type}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleValue('type', e.target.value)
-                handleValidation('type', e.target.value, '種別を選択してください')
               }}
-              isInvalid={validation.type.invalid}
+              isInvalid={validation.type.isInvalid}
               errorMessage={validation.type.message}
             >
               <Radio value='education'>学び</Radio>
@@ -183,9 +169,8 @@ export default function Page(): JSX.Element {
               value={form.date}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleValue('date', e.target.value)
-                handleValidation('date', e.target.value, '入力してください')
               }}
-              isInvalid={validation.date.invalid}
+              isInvalid={validation.date.isInvalid}
               errorMessage={validation.date.message}
             />
 
@@ -198,9 +183,8 @@ export default function Page(): JSX.Element {
               value={form.title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleValue('title', e.target.value)
-                handleValidation('title', e.target.value, '入力してください')
               }}
-              isInvalid={validation.title.invalid}
+              isInvalid={validation.title.isInvalid}
               errorMessage={validation.title.message}
             />
 
@@ -213,9 +197,8 @@ export default function Page(): JSX.Element {
               value={form.content}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleValue('content', e.target.value)
-                handleValidation('content', e.target.value, '入力してください')
               }}
-              isInvalid={validation.content.invalid}
+              isInvalid={validation.content.isInvalid}
               errorMessage={validation.content.message}
             />
           </CardBody>
