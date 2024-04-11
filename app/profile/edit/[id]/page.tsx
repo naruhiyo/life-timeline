@@ -37,7 +37,6 @@ export default function Page() {
     type: 'education',
     date: '',
     title: '',
-    subtitle: '',
     content: '',
   } as LifeTimelineEvent)
 

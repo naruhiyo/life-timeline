@@ -13,7 +13,6 @@ describe('Delete a Lifetime-event item', () => {
       type: 'education',
       date: '2023-12-31',
       title: 'jest title',
-      subtitle: 'jest subtitle',
       content: 'jest content',
     })
   })

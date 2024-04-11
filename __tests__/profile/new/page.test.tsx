@@ -50,4 +50,18 @@ describe('render registration screen', () => {
     // check method call times
     expect(db.insert).toHaveBeenCalledTimes(1)
   })
+
+  test("The registration process should not be completed if a user doesn't input information into the form.", async () => {
+    spy.mockReturnValue(Promise.resolve(true))
+
+    render(<Page />)
+
+    fireEvent.click(await screen.findByRole('button', { name: '保存する' }))
+
+    // don't show a registration complete dialog
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    // check method call times
+    expect(db.insert).toHaveBeenCalledTimes(0)
+  })
 })

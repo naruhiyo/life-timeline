@@ -16,7 +16,6 @@ describe('render home screen', () => {
           type: 'education',
           date: '2023-12-31',
           title: 'jest title',
-          subtitle: 'jest subtitle',
           content: 'jest content',
         },
         {
@@ -24,7 +23,6 @@ describe('render home screen', () => {
           type: 'education',
           date: '2024-01-01',
           title: 'jest title 2',
-          subtitle: 'jest subtitle 2',
           content: 'jest content 2',
         },
       ]),

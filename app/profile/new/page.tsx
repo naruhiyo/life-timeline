@@ -13,14 +13,18 @@ import {
   Button,
   RadioGroup,
   Radio,
-  useDisclosure,
 } from '@nextui-org/react'
 import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
 import styles from '@/components/profile/new/page.module.css'
-import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
+import {
+  LifeTimelineEvent,
+  LifeTimelineEventValid,
+  FormKeys,
+  LifeTimelineEventType,
+} from '@/types/LifeTimelineEvent'
 
 export default function Page(): JSX.Element {
   // handle routing
@@ -33,20 +37,89 @@ export default function Page(): JSX.Element {
     type: 'education',
     date: '',
     title: '',
-    subtitle: '',
     content: '',
   } as LifeTimelineEvent)
 
-  // input change event
-  const handleChange = (value: Partial<LifeTimelineEvent>) => {
-    setForm({ ...form, ...value })
+  // validation
+  const [validation, setValidation] = useState({
+    type: {
+      isInvalid: false,
+      message: '',
+    },
+    date: {
+      isInvalid: false,
+      message: '',
+    },
+    title: {
+      isInvalid: false,
+      message: '',
+    },
+    content: {
+      isInvalid: false,
+      message: '',
+    },
+  } as LifeTimelineEventValid)
+
+  // change value event
+  const handleValue = (formKey: FormKeys, value: string) => {
+    const valueState: Partial<LifeTimelineEvent> = {}
+
+    if (formKey === 'type') {
+      valueState[formKey] = value as LifeTimelineEventType
+    } else {
+      valueState[formKey] = value
+    }
+
+    setForm({
+      ...form,
+      ...valueState,
+    })
+  }
+
+  // check all input validation
+  const isInvalidForm = (): boolean => {
+    let isInvalidForm = false
+    const validationKeys: FormKeys[] = Object.keys(validation) as FormKeys[]
+    const validationForm: Partial<LifeTimelineEventValid> = {}
+
+    // reset validation
+    validationKeys.forEach((validationKey: FormKeys) => {
+      validationForm[validationKey] = {
+        isInvalid: false,
+        message: ``,
+      }
+    })
+
+    // check validation
+    validationKeys.forEach((validationKey: FormKeys) => {
+      const value: string = form[validationKey]
+
+      if (value.length < 1) {
+        validationForm[validationKey] = {
+          isInvalid: true,
+          message: `入力してください`,
+        }
+        isInvalidForm = true
+      }
+    })
+
+    setValidation({
+      ...validation,
+      ...validationForm,
+    })
+    return isInvalidForm
   }
 
   // submit event
   const handleSubmit = async () => {
+    // validation
+    const isInvalid = isInvalidForm()
+    if (isInvalid) {
+      return
+    }
+
     const logic: LifeTimelineEventLogic = new LifeTimelineEventLogic()
     const isCreated: boolean = await logic.createLifeTimelineEvent(form)
-
     if (isCreated) {
       setIsModalOpen(true)
     }
@@ -72,47 +145,61 @@ export default function Page(): JSX.Element {
 
           <CardBody className='space-y-8'>
             <RadioGroup
+              isRequired
               label='種別'
+              name='type'
               orientation='horizontal'
               value={form.type}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ type: e.target.value as LifeTimelineEventType })
+                handleValue('type', e.target.value)
               }}
+              isInvalid={validation.type.isInvalid}
+              errorMessage={validation.type.message}
             >
               <Radio value='education'>学び</Radio>
               <Radio value='work'>仕事</Radio>
             </RadioGroup>
 
             <Input
-              isClearable
+              isRequired
               type='date'
               label='日付'
-              placeholder='日付を入力してください'
+              name='date'
+              placeholder='イベントの日付'
               value={form.date}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ date: e.target.value })
+                handleValue('date', e.target.value)
               }}
+              isInvalid={validation.date.isInvalid}
+              errorMessage={validation.date.message}
             />
 
             <Input
-              isClearable
+              isRequired
               type='text'
+              name='title'
               label='イベントタイトル'
-              placeholder='イベントのタイトルを入力してください'
+              placeholder='イベントのタイトル'
               value={form.title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ title: e.target.value })
+                handleValue('title', e.target.value)
               }}
+              isInvalid={validation.title.isInvalid}
+              errorMessage={validation.title.message}
             />
 
             <Textarea
+              isRequired
               minRows={8}
               label='詳細'
-              placeholder='イベントの詳細を入力してください'
+              name='content'
+              placeholder='イベントの詳細'
               value={form.content}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ content: e.target.value })
+                handleValue('content', e.target.value)
               }}
+              isInvalid={validation.content.isInvalid}
+              errorMessage={validation.content.message}
             />
           </CardBody>
 
