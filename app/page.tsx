@@ -75,6 +75,7 @@ export default function Home(): JSX.Element {
     const targetElement: HTMLElement | null = document.getElementById(
       'target-download-component-id',
     )
+
     if (targetElement == null) {
       console.error('Could not get element to download')
       return false
@@ -102,7 +103,7 @@ export default function Home(): JSX.Element {
             </Button>
           </DropdownTrigger>
           <DropdownMenu
-            aria-label='Dynamic Actions'
+            aria-label='DownloadFormats'
             items={downloadFormatItems}
             onAction={(key) => download(key as string)}
           >
