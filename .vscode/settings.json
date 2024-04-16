@@ -1,15 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features",
-    "editor.formatOnSave": false
-  },
-  "[ejs]": {
-    "editor.formatOnSave": false
-  },
   "prettier.configPath": ".prettierrc"
 }
