@@ -8,8 +8,6 @@ const intersectionObserverMock = () => ({
   disconnect: () => jest.fn(),
 })
 
-const getComputedStyleMock = (elt: Element) => CSSStyleDeclaration
-
 window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock)
 
 Object.defineProperty(window, 'crypto', {
