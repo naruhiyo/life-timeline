@@ -67,7 +67,7 @@ export default function Home(): JSX.Element {
 
   const loadItems = async (): Promise<void> => {
     const logic = new LifeTimelineEventLogic()
-    setItems(await logic.getLifeTimelineEvent())
+    setItems(await logic.getAllLifeTimelineEvents())
   }
 
   const download = (key: string) => {

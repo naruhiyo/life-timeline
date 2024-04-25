@@ -7,6 +7,12 @@ export default defineConfig({
   e2e: {
     baseUrl: `http://${HOST_FQDN}:3000`,
     setupNodeEvents(on, config) {
+      on('task', {
+        log(args) {
+          console.log(...args)
+          return null
+        },
+      })
       // implement node event listeners here
     },
   },

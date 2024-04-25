@@ -17,14 +17,13 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import { useRouter, useParams } from 'next/navigation' // next/router ではない
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
-import styles from '@/components/profile/new/page.module.css'
+import styles from '@/components/profile/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
 export default function Page() {
-  // handle routing
   const router = useRouter()
   const pathParams: {
     id: string
@@ -40,6 +39,11 @@ export default function Page() {
     content: '',
   } as LifeTimelineEvent)
 
+  const loadItem = async (): Promise<void> => {
+    const logic = new LifeTimelineEventLogic()
+    setForm(await logic.getLifeTimelineEvent(pathParams.id))
+  }
+
   // input change event
   const handleChange = (value: Partial<LifeTimelineEvent>) => {
     setForm({ ...form, ...value })
@@ -48,6 +52,7 @@ export default function Page() {
   // submit event
   const handleSubmit = async () => {
     const logic = new LifeTimelineEventLogic()
+    await logic.updateLifeTimelineEvent(form)
     setIsModalOpen(true)
   }
 
@@ -70,15 +75,18 @@ export default function Page() {
     }
   }
 
+  useEffect(() => {
+    loadItem()
+  }, [])
+
   return (
     <main className={styles.main}>
       <div className='flex justify-center'>
         <Card className='w-full'>
-          <CardHeader className='flex justify-between gap-3'>
+          <CardHeader className='flex gap-3'>
             <div className='flex flex-col'>
-              <p className='text-md'>新規追加</p>
+              <p className='text-md'>編集</p>
             </div>
-
             <Button isIconOnly color='danger' variant='light' onClick={submitDelete}>
               <Delete />
             </Button>
@@ -148,7 +156,7 @@ export default function Page() {
         </Card>
 
         <CompleteModal
-          headerText=''
+          headerText='編集完了'
           closeCallback={handleModalClosed}
           isOpen={isModalOpen}
         ></CompleteModal>
