@@ -1,9 +1,6 @@
-'use client'
 import '@/components/globals.css'
 import { Navbar, NavbarBrand, Image, Spacer } from '@nextui-org/react'
 import type { Metadata } from 'next'
-import { useEffect } from 'react'
-import { DBLogic } from '@/api/DBLogic'
 import { Providers } from '@/providers'
 
 const metadata: Metadata = {
@@ -16,17 +13,6 @@ const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
-  const closeIndexedDB = async (): Promise<void> => {
-    const logic = new DBLogic()
-    await logic.close()
-  }
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
-      closeIndexedDB()
-    })
-  }, [])
-
   return (
     <html lang='en' className='dark'>
       <body>

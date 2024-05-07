@@ -14,10 +14,10 @@ import {
   Button,
   RadioGroup,
   Radio,
-  useDisclosure,
 } from '@nextui-org/react'
 import { useRouter, useParams } from 'next/navigation' // next/router ではない
 import { useState, useEffect } from 'react'
+import { DBLogic } from '@/api/DBLogic'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
 import styles from '@/components/profile/page.module.css'
@@ -77,7 +77,15 @@ export default function Page() {
 
   useEffect(() => {
     loadItem()
+    window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
+      closeIndexedDB()
+    })
   }, [])
+
+  const closeIndexedDB = async (): Promise<void> => {
+    const logic = new DBLogic()
+    await logic.close()
+  }
 
   return (
     <main className={styles.main}>
