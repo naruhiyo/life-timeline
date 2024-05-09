@@ -19,6 +19,7 @@ module.exports = {
             background: '#fefefd',
             foreground: '#45659c',
             default: {
+              600: '#45659c',
               DEFAULT: '#f7f6ea',
               foreground: '#45659c',
             },
