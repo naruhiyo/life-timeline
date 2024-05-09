@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
           <NavbarBrand>
             <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />
             <Spacer x={4} />
-            <p className='font-bold'>Lie-tfimeline</p>
+            <p className='font-bold'>Life-timeline</p>
           </NavbarBrand>
         </Navbar>
         <Providers>
