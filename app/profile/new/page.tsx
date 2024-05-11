@@ -35,7 +35,13 @@ export default function Page(): JSX.Element {
   const [form, setForm] = useState({
     id: crypto.randomUUID(),
     type: 'education',
-    date: '',
+    date: new Date()
+      .toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replaceAll('/', '-'),
     title: '',
     content: '',
   } as LifeTimelineEvent)
