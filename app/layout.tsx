@@ -1,7 +1,11 @@
 import '@/components/globals.css'
 import { Navbar, NavbarBrand, Image, Spacer } from '@nextui-org/react'
 import type { Metadata } from 'next'
+import { Noto_Sans_JP } from 'next/font/google'
+
 import { Providers } from '@/providers'
+// web fonts
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
@@ -40,7 +44,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang='ja' prefix='og: http://ogp.me/ns# website: http://ogp.me/ns/websaite#'>
-      <body>
+      <body className={notoSansJP.className}>
         <Navbar shouldHideOnScroll isBordered position='static'>
           <NavbarBrand>
             <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />

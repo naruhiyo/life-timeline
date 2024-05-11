@@ -31,31 +31,38 @@ const timelineItemMap: {
   [key: string]: {
     color: string
     icon: ReactElement
+    label: string
   }
 } = {
   education: {
     color: '#aecff3',
     icon: <SchoolIcon />,
+    label: '学び',
   },
   work: {
     color: '#3e5ba0',
     icon: <WorkIcon />,
+    label: '仕事',
   },
   certificate: {
     color: '#141415',
     icon: <TipsAndUpdatesIcon />,
+    label: '資格',
   },
   life: {
     color: '#e7a949',
     icon: <Diversity1Icon />,
+    label: '生活',
   },
   hobby: {
     color: '#69b981',
     icon: <InsertEmoticonIcon />,
+    label: '趣味',
   },
   important: {
     color: '#f44336',
     icon: <CampaignIcon />,
+    label: '重要',
   },
 }
 
@@ -154,6 +161,7 @@ export default function Home(): JSX.Element {
           <VerticalTimeline lineColor='#45659c'>
             {items.map((item, index) => {
               const className: string = `vertical-timeline-element--${item.type}`
+              const label: string = timelineItemMap[item.type].label
               const color: string = timelineItemMap[item.type].color
               const icon = timelineItemMap[item.type].icon
 
@@ -165,7 +173,7 @@ export default function Home(): JSX.Element {
                   contentArrowStyle={{ borderRight: `7px solid ${color}` }}
                   date={item.date}
                   iconStyle={{ border: `2px solid ${color}`, background: '#fefefd', color: color }}
-                  icon={icon}
+                  icon={<Tooltip content={label}>{icon}</Tooltip>}
                   key={index}
                   onTimelineElementClick={() => {
                     redirectEdit(item.id)
