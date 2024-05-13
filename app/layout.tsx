@@ -37,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
             <p className='font-bold '>Lie-tfimeline</p>
           </NavbarBrand>
         </Navbar>
-        <Providers>{children}</Providers>
+        <Providers>
+          <main className='main'>{children}</main>
+        </Providers>
       </body>
     </html>
   )
