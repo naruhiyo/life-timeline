@@ -18,7 +18,6 @@ import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
-import styles from '@/components/page.module.css'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
 
 const timelineItemMap: {
@@ -94,7 +93,7 @@ export default function Home(): JSX.Element {
   }, [])
 
   return (
-    <main className={styles.main}>
+    <>
       <div className='flex justify-end space-x-1'>
         <Dropdown backdrop='blur'>
           <DropdownTrigger>
@@ -149,6 +148,6 @@ export default function Home(): JSX.Element {
           </VerticalTimeline>
         )}
       </div>
-    </main>
+    </>
   )
 }

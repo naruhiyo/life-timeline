@@ -1,3 +1,4 @@
+/* === Tailwind Style === */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -102,4 +103,12 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* === App Global Style === */
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 6rem;
+  min-height: 100vh;
 }

@@ -77,28 +77,24 @@ export class IndexedDB {
    * @returns {Promise<boolean>}
    */
   async update<T>(form: T): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn("Update failed because of the db doesn't connected.")
-        reject(false)
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn("Update failed because of the db doesn't connected.")
+      return false
+    }
 
+    try {
       // start transaction
       const transaction = IndexedDB.db!.transaction(IndexedDBConfig.STORE_NAME, 'readwrite')
 
       // save to store
       const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
-      lifeTimelineStore.put(form)
-
-      transaction.oncomplete = (_: Event) => {
-        resolve(true)
-      }
-
-      transaction.onerror = (e: Event) => {
-        console.warn('transaction error', e.target)
-        reject(false)
-      }
-    })
+      await lifeTimelineStore.put(form)
+      await transaction.done
+      return true
+    } catch (err) {
+      console.warn('transaction error', err)
+      return false
+    }
   }
 
   /**
@@ -131,27 +127,22 @@ export class IndexedDB {
    * @returns {Promise<T | undefined>} The record matching the given ID, or undefined if not found
    */
   async select<T>(id: string): Promise<T | undefined> {
-    return new Promise((resolve, reject) => {
-      if (IndexedDB.db === undefined || IndexedDB.db === null) {
-        console.warn('Select failed because the database is not connected.')
-        return reject(undefined)
-      }
+    if (IndexedDB.db === undefined || IndexedDB.db === null) {
+      console.warn('Select failed because the database is not connected.')
+      return undefined
+    }
 
+    try {
       const transaction = IndexedDB.db.transaction(IndexedDBConfig.STORE_NAME, 'readonly')
       const lifeTimelineStore = transaction.objectStore(IndexedDBConfig.STORE_NAME)
 
-      const request = lifeTimelineStore.get(id)
-
-      request.onsuccess = () => {
-        const item: T | undefined = request.result
-        resolve(item)
-      }
-
-      request.onerror = (e: Event) => {
-        console.error('Selection error:', e.target)
-        reject(undefined)
-      }
-    })
+      const item = await lifeTimelineStore.get(id)
+      await transaction.done
+      return item
+    } catch (err) {
+      console.warn('transaction error', err)
+      return undefined
+    }
   }
 
   /**

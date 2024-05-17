@@ -20,7 +20,6 @@ import { useRouter, useParams } from 'next/navigation' // next/router ではな�
 import { useState, useEffect } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
-import styles from '@/components/profile/page.module.css'
 import { LifeTimelineEvent, LifeTimelineEventType } from '@/types/LifeTimelineEvent'
 
 export default function Page() {
@@ -80,87 +79,85 @@ export default function Page() {
   }, [])
 
   return (
-    <main className={styles.main}>
-      <div className='flex justify-center'>
-        <Card className='w-full'>
-          <CardHeader className='flex gap-3'>
-            <div className='flex flex-col'>
-              <p className='text-md'>編集</p>
-            </div>
-            <Button isIconOnly color='danger' variant='light' onClick={submitDelete}>
-              <Delete />
-            </Button>
-          </CardHeader>
+    <div className='flex justify-center'>
+      <Card className='w-full'>
+        <CardHeader className='flex gap-3'>
+          <div className='flex flex-col'>
+            <p className='text-md'>編集</p>
+          </div>
+          <Button isIconOnly color='danger' variant='light' onClick={submitDelete}>
+            <Delete />
+          </Button>
+        </CardHeader>
 
-          <Divider />
+        <Divider />
 
-          <CardBody className='space-y-8'>
-            <RadioGroup
-              label='種別'
-              orientation='horizontal'
-              value={form.type}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ type: e.target.value as LifeTimelineEventType })
-              }}
-            >
-              <Radio value='education'>学び</Radio>
-              <Radio value='work'>仕事</Radio>
-            </RadioGroup>
+        <CardBody className='space-y-8'>
+          <RadioGroup
+            label='種別'
+            orientation='horizontal'
+            value={form.type}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleChange({ type: e.target.value as LifeTimelineEventType })
+            }}
+          >
+            <Radio value='education'>学び</Radio>
+            <Radio value='work'>仕事</Radio>
+          </RadioGroup>
 
-            <Input
-              isClearable
-              type='date'
-              label='日付'
-              placeholder='日付を入力してください'
-              value={form.date}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ date: e.target.value })
-              }}
-            />
+          <Input
+            isClearable
+            type='date'
+            label='日付'
+            placeholder='日付を入力してください'
+            value={form.date}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleChange({ date: e.target.value })
+            }}
+          />
 
-            <Input
-              isClearable
-              type='text'
-              label='イベントタイトル'
-              placeholder='イベントのタイトルを入力してください'
-              value={form.title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ title: e.target.value })
-              }}
-            />
+          <Input
+            isClearable
+            type='text'
+            label='イベントタイトル'
+            placeholder='イベントのタイトルを入力してください'
+            value={form.title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleChange({ title: e.target.value })
+            }}
+          />
 
-            <Textarea
-              minRows={8}
-              label='詳細'
-              placeholder='イベントの詳細を入力してください'
-              value={form.content}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleChange({ content: e.target.value })
-              }}
-            />
-          </CardBody>
+          <Textarea
+            minRows={8}
+            label='詳細'
+            placeholder='イベントの詳細を入力してください'
+            value={form.content}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleChange({ content: e.target.value })
+            }}
+          />
+        </CardBody>
 
-          <Divider />
+        <Divider />
 
-          <CardFooter className='justify-between'>
-            <Tooltip content='トップへ戻る'>
-              <Link href='/'>
-                <ArrowBackIosNewIcon />
-              </Link>
-            </Tooltip>
+        <CardFooter className='justify-between'>
+          <Tooltip content='トップへ戻る'>
+            <Link href='/'>
+              <ArrowBackIosNewIcon />
+            </Link>
+          </Tooltip>
 
-            <Button color='success' variant='ghost' onClick={handleSubmit}>
-              保存する
-            </Button>
-          </CardFooter>
-        </Card>
+          <Button color='success' variant='ghost' onClick={handleSubmit}>
+            保存する
+          </Button>
+        </CardFooter>
+      </Card>
 
-        <CompleteModal
-          headerText='編集完了'
-          closeCallback={handleModalClosed}
-          isOpen={isModalOpen}
-        ></CompleteModal>
-      </div>
-    </main>
+      <CompleteModal
+        headerText='編集完了'
+        closeCallback={handleModalClosed}
+        isOpen={isModalOpen}
+      ></CompleteModal>
+    </div>
   )
 }

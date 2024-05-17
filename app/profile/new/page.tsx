@@ -18,7 +18,6 @@ import { useRouter } from 'next/navigation' // next/router ではない
 import { useState } from 'react'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
-import styles from '@/components/profile/page.module.css'
 import {
   LifeTimelineEvent,
   LifeTimelineEventValid,
@@ -132,98 +131,96 @@ export default function Page(): JSX.Element {
   }
 
   return (
-    <main className={styles.main}>
-      <div className='flex justify-center'>
-        <Card className='w-full'>
-          <CardHeader className='flex gap-3'>
-            <div className='flex flex-col'>
-              <p className='text-md'>新規追加</p>
-            </div>
-          </CardHeader>
+    <div className='flex justify-center'>
+      <Card className='w-full'>
+        <CardHeader className='flex gap-3'>
+          <div className='flex flex-col'>
+            <p className='text-md'>新規追加</p>
+          </div>
+        </CardHeader>
 
-          <Divider />
+        <Divider />
 
-          <CardBody className='space-y-8'>
-            <RadioGroup
-              isRequired
-              label='種別'
-              name='type'
-              orientation='horizontal'
-              value={form.type}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleValue('type', e.target.value)
-              }}
-              isInvalid={validation.type.isInvalid}
-              errorMessage={validation.type.message}
-            >
-              <Radio value='education'>学び</Radio>
-              <Radio value='work'>仕事</Radio>
-            </RadioGroup>
+        <CardBody className='space-y-8'>
+          <RadioGroup
+            isRequired
+            label='種別'
+            name='type'
+            orientation='horizontal'
+            value={form.type}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleValue('type', e.target.value)
+            }}
+            isInvalid={validation.type.isInvalid}
+            errorMessage={validation.type.message}
+          >
+            <Radio value='education'>学び</Radio>
+            <Radio value='work'>仕事</Radio>
+          </RadioGroup>
 
-            <Input
-              isRequired
-              type='date'
-              label='日付'
-              name='date'
-              placeholder='イベントの日付'
-              value={form.date}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleValue('date', e.target.value)
-              }}
-              isInvalid={validation.date.isInvalid}
-              errorMessage={validation.date.message}
-            />
+          <Input
+            isRequired
+            type='date'
+            label='日付'
+            name='date'
+            placeholder='イベントの日付'
+            value={form.date}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleValue('date', e.target.value)
+            }}
+            isInvalid={validation.date.isInvalid}
+            errorMessage={validation.date.message}
+          />
 
-            <Input
-              isRequired
-              type='text'
-              name='title'
-              label='イベントタイトル'
-              placeholder='イベントのタイトル'
-              value={form.title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleValue('title', e.target.value)
-              }}
-              isInvalid={validation.title.isInvalid}
-              errorMessage={validation.title.message}
-            />
+          <Input
+            isRequired
+            type='text'
+            name='title'
+            label='イベントタイトル'
+            placeholder='イベントのタイトル'
+            value={form.title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleValue('title', e.target.value)
+            }}
+            isInvalid={validation.title.isInvalid}
+            errorMessage={validation.title.message}
+          />
 
-            <Textarea
-              isRequired
-              minRows={8}
-              label='詳細'
-              name='content'
-              placeholder='イベントの詳細'
-              value={form.content}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleValue('content', e.target.value)
-              }}
-              isInvalid={validation.content.isInvalid}
-              errorMessage={validation.content.message}
-            />
-          </CardBody>
+          <Textarea
+            isRequired
+            minRows={8}
+            label='詳細'
+            name='content'
+            placeholder='イベントの詳細'
+            value={form.content}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleValue('content', e.target.value)
+            }}
+            isInvalid={validation.content.isInvalid}
+            errorMessage={validation.content.message}
+          />
+        </CardBody>
 
-          <Divider />
+        <Divider />
 
-          <CardFooter className='justify-between'>
-            <Tooltip content='トップへ戻る'>
-              <Link href='/'>
-                <ArrowBackIosNewIcon />
-              </Link>
-            </Tooltip>
+        <CardFooter className='justify-between'>
+          <Tooltip content='トップへ戻る'>
+            <Link href='/'>
+              <ArrowBackIosNewIcon />
+            </Link>
+          </Tooltip>
 
-            <Button color='success' variant='ghost' onClick={handleSubmit}>
-              保存する
-            </Button>
-          </CardFooter>
-        </Card>
+          <Button color='success' variant='ghost' onClick={handleSubmit}>
+            保存する
+          </Button>
+        </CardFooter>
+      </Card>
 
-        <CompleteModal
-          headerText='登録完了'
-          closeCallback={handleModalClose}
-          isOpen={isModalOpen}
-        ></CompleteModal>
-      </div>
-    </main>
+      <CompleteModal
+        headerText='登録完了'
+        closeCallback={handleModalClose}
+        isOpen={isModalOpen}
+      ></CompleteModal>
+    </div>
   )
 }
