@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
+import { act } from 'react-dom/test-utils'
 import { select } from 'react-select-event'
 import { Downloader } from '@/api/Downloader'
 import { IndexedDB } from '@/api/IndexedDB'
@@ -11,6 +12,7 @@ jest.mock('next/navigation', () => ({
 }))
 
 describe('render home screen', () => {
+  let container: HTMLElement
   test('Display two life-timeline event items when the retrieve function is called once with IndexedDB.', async () => {
     const db = await IndexedDB.getSingleton()
     jest.spyOn(db, 'selectAll').mockImplementation(() =>
@@ -32,12 +34,14 @@ describe('render home screen', () => {
       ]),
     )
 
-    render(<Home />)
+    await act(() => {
+      const renderedComponent = render(<Home />)
+      container = renderedComponent.container
+    })
 
-    const main = await screen.findByRole('main')
     const firstItem = await screen.findByText('jest title')
 
-    const verticalTimelineItems = main.querySelectorAll('.vertical-timeline-element')
+    const verticalTimelineItems = container.querySelectorAll('.vertical-timeline-element')
     expect(verticalTimelineItems).toHaveLength(2)
     expect(firstItem).toBeInTheDocument()
   })
@@ -46,11 +50,12 @@ describe('render home screen', () => {
     const db = await IndexedDB.getSingleton()
     jest.spyOn(db, 'selectAll').mockImplementation(() => Promise.resolve([]))
 
-    render(<Home />)
+    await act(() => {
+      const renderedComponent = render(<Home />)
+      container = renderedComponent.container
+    })
 
-    const main = await screen.findByRole('main')
-
-    const verticalTimelineItems = main.querySelectorAll('.vertical-timeline-element')
+    const verticalTimelineItems = container.querySelectorAll('.vertical-timeline-element')
     expect(verticalTimelineItems).toHaveLength(0)
   })
 })
@@ -58,6 +63,7 @@ describe('render home screen', () => {
 describe('Download screen', () => {
   it('Download svg when the `SVG` clicked.', async () => {
     const user = userEvent.setup()
+
     render(<Home />)
 
     const downloaderMock = await jest
@@ -74,6 +80,7 @@ describe('Download screen', () => {
 
   it('Download png when the `PNG` clicked.', async () => {
     const user = userEvent.setup()
+
     render(<Home />)
 
     const downloaderMock = await jest
