@@ -1,5 +1,5 @@
 import '@/components/globals.css'
-import { Navbar, NavbarBrand, Image, Spacer } from '@nextui-org/react'
+import { Navbar, NavbarBrand, Image, Spacer, Link } from '@nextui-org/react'
 import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 
@@ -47,9 +47,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
       <body className={notoSansJP.className}>
         <Navbar shouldHideOnScroll isBordered position='static'>
           <NavbarBrand>
-            <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />
-            <Spacer x={4} />
-            <p className='font-bold'>Life-timeline</p>
+            <Link href='/' color='foreground'>
+              <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />
+              <Spacer x={4} />
+              <p className='font-bold'>Life-timeline</p>
+            </Link>
           </NavbarBrand>
         </Navbar>
         <Providers>

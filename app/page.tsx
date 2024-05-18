@@ -20,20 +20,14 @@ import {
 } from '@nextui-org/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ReactElement, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { DBLogic } from '@/api/DBLogic'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
-import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
+import { DownloadFormat, LifeTimelineEvent, VerticalTimelineMap } from '@/types/LifeTimelineEvent'
 
-const timelineItemMap: {
-  [key: string]: {
-    color: string
-    icon: ReactElement
-    label: string
-  }
-} = {
+const timelineItemMap: VerticalTimelineMap = {
   education: {
     color: '#aecff3',
     icon: <SchoolIcon />,
@@ -66,10 +60,7 @@ const timelineItemMap: {
   },
 }
 
-const downloadFormatItems: Array<{
-  key: string
-  label: string
-}> = [
+const downloadFormatItems: DownloadFormat = [
   {
     key: 'pdf',
     label: 'PDF',
@@ -169,7 +160,10 @@ export default function Home(): JSX.Element {
                 <VerticalTimelineElement
                   visible={true}
                   className={className}
-                  contentStyle={{ border: `1px solid ${color}` }}
+                  contentStyle={{
+                    border: `1px solid ${color}`,
+                    cursor: 'pointer',
+                  }}
                   contentArrowStyle={{ borderRight: `7px solid ${color}` }}
                   date={item.date}
                   iconStyle={{ border: `2px solid ${color}`, background: '#fefefd', color: color }}

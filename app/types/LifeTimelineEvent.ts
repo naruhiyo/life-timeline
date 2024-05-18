@@ -1,3 +1,5 @@
+import { ReactElement } from 'react'
+
 export type LifeTimelineEvent = {
   id: string
   type: LifeTimelineEventType
@@ -19,3 +21,16 @@ export type FormValidation = {
   message: string
 }
 export type LifeTimelineEventType = 'education' | 'work'
+
+export type VerticalTimelineMap = {
+  [key: string]: {
+    color: string
+    icon: ReactElement
+    label: string
+  }
+}
+
+export type DownloadFormat = Array<{
+  key: string
+  label: string
+}>
