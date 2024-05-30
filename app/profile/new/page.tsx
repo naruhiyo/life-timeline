@@ -73,7 +73,7 @@ export default function Page(): JSX.Element {
   }, [])
 
   // change value event
-  const handleValue = (formKey: FormKeys, value: string) => {
+  const handleChangeValue = (formKey: FormKeys, value: string) => {
     const valueState: Partial<LifeTimelineEvent> = {}
 
     if (formKey === 'type') {
@@ -125,8 +125,7 @@ export default function Page(): JSX.Element {
   // submit event
   const handleSubmit = async () => {
     // validation
-    const isInvalid = isInvalidForm()
-    if (isInvalid) {
+    if (isInvalidForm()) {
       return
     }
 
@@ -167,7 +166,7 @@ export default function Page(): JSX.Element {
             orientation='horizontal'
             value={form.type}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleValue('type', e.target.value)
+              handleChangeValue('type', e.target.value)
             }}
             isInvalid={validation.type.isInvalid}
             errorMessage={validation.type.message}
@@ -188,7 +187,7 @@ export default function Page(): JSX.Element {
             placeholder='イベントの日付'
             value={form.date}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleValue('date', e.target.value)
+              handleChangeValue('date', e.target.value)
             }}
             isInvalid={validation.date.isInvalid}
             errorMessage={validation.date.message}
@@ -202,7 +201,7 @@ export default function Page(): JSX.Element {
             placeholder='イベントのタイトル'
             value={form.title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleValue('title', e.target.value)
+              handleChangeValue('title', e.target.value)
             }}
             isInvalid={validation.title.isInvalid}
             errorMessage={validation.title.message}
@@ -216,7 +215,7 @@ export default function Page(): JSX.Element {
             placeholder='イベントの詳細'
             value={form.content}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleValue('content', e.target.value)
+              handleChangeValue('content', e.target.value)
             }}
             isInvalid={validation.content.isInvalid}
             errorMessage={validation.content.message}

@@ -56,11 +56,11 @@ export class LifeTimelineEventLogic {
   /**
    * Delete a life-timeline event
    *
-   * @param encoedId Unique key with base64
+   * @param encodedId Unique key with base64
    * @returns {Promise<boolean>}
    */
-  async deleteLifeTimelineEvent(encoedId: string): Promise<boolean> {
-    const decodedId: string = atob(encoedId)
+  async deleteLifeTimelineEvent(encodedId: string): Promise<boolean> {
+    const decodedId: string = atob(encodedId)
     const db: IndexedDB = await IndexedDB.getSingleton()
     return await db.delete(decodedId)
   }
