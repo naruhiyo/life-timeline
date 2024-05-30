@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: '%s | Life-timeline',
     default: 'Life-timeline | 人生を振り返ってみよう!',
   },
-  keywords: 'Life-timeline,Naruhiyo Project,comet,narugit',
+  keywords: ['Life-timeline', 'Naruhiyo Project', 'comet', 'narugit'],
   authors: [{ name: 'team naruhiyo', url: 'https://naruhiyo.github.io/' }],
   description: '人生を振り返ってみよう!',
   formatDetection: {
@@ -34,10 +34,6 @@ export const metadata: Metadata = {
         url: '/images/logo.png',
       },
     ],
-  },
-  other: {
-    'msapplication-TileImage': '/images/favicon.ico',
-    'msapplication-TileColor': '#f7f6f5',
   },
 }
 
