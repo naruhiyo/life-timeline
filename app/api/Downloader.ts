@@ -12,11 +12,10 @@ export class Downloader {
    */
   async download(targetElement: HTMLElement, format: string): Promise<boolean> {
     let downloadElement: HTMLAnchorElement
-    let bgColor: string
+    const bgColor: string = '#ffffff'
     switch (format) {
       case 'svg':
         downloadElement = document.createElement('a')
-        bgColor = window.getComputedStyle(document.body).backgroundColor
         downloadElement.href = await domtoimage.toSvg(targetElement, {
           width: targetElement.clientWidth,
           height: targetElement.clientHeight,
@@ -30,6 +29,7 @@ export class Downloader {
         downloadElement.href = await domtoimage.toPng(targetElement, {
           width: targetElement.clientWidth,
           height: targetElement.clientHeight,
+          bgcolor: bgColor,
         })
         downloadElement.download = `${this.fileName}.png`
         downloadElement.click()
