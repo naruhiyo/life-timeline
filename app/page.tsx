@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ReactElement, useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
+import { DBLogic } from '@/api/DBLogic'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
@@ -88,8 +89,16 @@ export default function Home(): JSX.Element {
     router.push(`/profile/edit/${encodedId}`)
   }
 
+  const closeIndexedDB = async (): Promise<void> => {
+    const logic = new DBLogic()
+    await logic.close()
+  }
+
   useEffect(() => {
     loadItems()
+    window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
+      closeIndexedDB()
+    })
   }, [])
 
   return (

@@ -15,7 +15,8 @@ import {
   Radio,
 } from '@nextui-org/react'
 import { useRouter } from 'next/navigation' // next/router ではない
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { DBLogic } from '@/api/DBLogic'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
 import CompleteModal from '@/components/CompleteModal'
 import {
@@ -58,6 +59,12 @@ export default function Page(): JSX.Element {
       message: '',
     },
   } as LifeTimelineEventValid)
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', (e: BeforeUnloadEvent) => {
+      closeIndexedDB()
+    })
+  }, [])
 
   // change value event
   const handleValue = (formKey: FormKeys, value: string) => {
@@ -128,6 +135,11 @@ export default function Page(): JSX.Element {
   const handleModalClose = () => {
     setIsModalOpen(false)
     router.push('/')
+  }
+
+  const closeIndexedDB = async (): Promise<void> => {
+    const logic = new DBLogic()
+    await logic.close()
   }
 
   return (
