@@ -111,6 +111,10 @@ export default function Page() {
           >
             <Radio value='education'>学び</Radio>
             <Radio value='work'>仕事</Radio>
+            <Radio value='certificate'>資格</Radio>
+            <Radio value='life'>生活</Radio>
+            <Radio value='hobby'>趣味</Radio>
+            <Radio value='important'>重要</Radio>
           </RadioGroup>
 
           <Input
