@@ -87,7 +87,6 @@ export default function Home(): JSX.Element {
   }
 
   const download = (key: string) => {
-    console.log('called')
     const targetElement: HTMLElement | null = document.getElementById(
       'target-download-component-id',
     )
