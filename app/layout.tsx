@@ -55,7 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
           </NavbarBrand>
         </Navbar>
         <Providers>
-          <main className='main'>{children}</main>
+          <main className='main' style={{ background: '#f7f6ea' }}>
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

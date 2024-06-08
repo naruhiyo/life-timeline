@@ -160,12 +160,17 @@ export default function Home(): JSX.Element {
                   visible={true}
                   className={className}
                   contentStyle={{
-                    border: `1px solid ${color}`,
+                    background: '#aecff3',
                     cursor: 'pointer',
+                    color: '#45659c',
                   }}
-                  contentArrowStyle={{ borderRight: `7px solid ${color}` }}
+                  contentArrowStyle={{ borderRight: `7px solid #aecff3` }}
                   date={item.date}
-                  iconStyle={{ border: `2px solid ${color}`, background: '#fefefd', color: color }}
+                  iconStyle={{
+                    border: `2px solid ${color}`,
+                    background: '#fefefd',
+                    color: color,
+                  }}
                   icon={<Tooltip content={label}>{icon}</Tooltip>}
                   key={index}
                   onTimelineElementClick={() => {
