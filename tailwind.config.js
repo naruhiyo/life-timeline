@@ -20,7 +20,7 @@ module.exports = {
             foreground: '#45659c',
             default: {
               600: '#45659c',
-              DEFAULT: '#f7f6ea',
+              DEFAULT: '#aecff3',
               foreground: '#45659c',
             },
             primary: {
