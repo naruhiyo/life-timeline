@@ -1,7 +1,11 @@
 import '@/components/globals.css'
-import { Navbar, NavbarBrand, Image, Spacer } from '@nextui-org/react'
+import { Navbar, NavbarBrand, Image, Spacer, Link } from '@nextui-org/react'
 import type { Metadata } from 'next'
+import { Noto_Sans_JP } from 'next/font/google'
+
 import { Providers } from '@/providers'
+// web fonts
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
@@ -39,21 +43,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
-    <html
-      lang='ja'
-      className='dark'
-      prefix='og: http://ogp.me/ns# website: http://ogp.me/ns/websaite#'
-    >
-      <body>
+    <html lang='ja' prefix='og: http://ogp.me/ns# website: http://ogp.me/ns/websaite#'>
+      <body className={notoSansJP.className}>
         <Navbar shouldHideOnScroll isBordered position='static'>
           <NavbarBrand>
-            <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />
-            <Spacer x={4} />
-            <p className='font-bold '>Lie-tfimeline</p>
+            <Link href='/' color='foreground'>
+              <Image height={36} width={36} isBlurred src='/images/logo.png' alt='Logo' />
+              <Spacer x={4} />
+              <p className='font-bold'>Life-timeline</p>
+            </Link>
           </NavbarBrand>
         </Navbar>
         <Providers>
-          <main className='main'>{children}</main>
+          <main className='main' style={{ background: '#f7f6ea' }}>
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

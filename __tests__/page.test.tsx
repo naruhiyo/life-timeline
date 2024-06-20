@@ -70,12 +70,13 @@ describe('Download screen', () => {
       .spyOn(Downloader.prototype, 'download')
       .mockReturnValue(Promise.resolve(true))
 
-    // download svg
-    user.click(await screen.findByTestId('DownloadIcon'))
-    user.click(await screen.findByRole('menuitem', { name: 'SVG' }))
-    await select(await screen.findByRole('menu'), 'SVG')
-
-    expect(downloaderMock).toHaveBeenCalled()
+    act(async () => {
+      // download svg
+      user.click(await screen.findByTestId('DownloadIcon'))
+      user.click(await screen.findByRole('menuitem', { name: 'SVG' }))
+      await select(await screen.findByRole('menu')!, 'SVG')
+      expect(downloaderMock).toHaveBeenCalled()
+    })
   })
 
   it('Download png when the `PNG` clicked.', async () => {
@@ -86,12 +87,13 @@ describe('Download screen', () => {
     const downloaderMock = await jest
       .spyOn(Downloader.prototype, 'download')
       .mockReturnValue(Promise.resolve(true))
+    act(async () => {
+      // download png
+      user.click(await screen.findByTestId('DownloadIcon'))
+      user.click(await screen.findByRole('menuitem', { name: 'PNG' }))
+      await select(await screen.findByRole('menu'), 'PNG')
 
-    // download png
-    user.click(await screen.findByTestId('DownloadIcon'))
-    user.click(await screen.findByRole('menuitem', { name: 'PNG' }))
-    await select(await screen.findByRole('menu'), 'PNG')
-
-    expect(downloaderMock).toHaveBeenCalled()
+      expect(downloaderMock).toHaveBeenCalled()
+    })
   })
 })

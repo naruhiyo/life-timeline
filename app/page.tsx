@@ -1,9 +1,15 @@
 'use client'
 import 'react-vertical-timeline-component/style.min.css'
 import AddIcon from '@mui/icons-material/Add'
+import CampaignIcon from '@mui/icons-material/Campaign'
+import Diversity1Icon from '@mui/icons-material/Diversity1'
 import DownloadIcon from '@mui/icons-material/Download'
+import ImageIcon from '@mui/icons-material/Image'
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon'
 import SchoolIcon from '@mui/icons-material/School'
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates'
 import WorkIcon from '@mui/icons-material/Work'
+
 import {
   Button,
   Dropdown,
@@ -14,37 +20,47 @@ import {
 } from '@nextui-org/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ReactElement, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { DBLogic } from '@/api/DBLogic'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
-import { LifeTimelineEvent } from '@/types/LifeTimelineEvent'
+import { DownloadFormat, LifeTimelineEvent, VerticalTimelineMap } from '@/types/LifeTimelineEvent'
 
-const timelineItemMap: {
+const timelineItemMap: VerticalTimelineMap = {
   education: {
-    color: string
-    icon: ReactElement
-  }
-  work: {
-    color: string
-    icon: ReactElement
-  }
-} = {
-  education: {
-    color: 'rgb(214, 239, 255)',
+    color: '#aecff3',
     icon: <SchoolIcon />,
+    label: '学び',
   },
   work: {
-    color: 'rgb(148, 193, 255)',
+    color: '#3e5ba0',
     icon: <WorkIcon />,
+    label: '仕事',
+  },
+  certificate: {
+    color: '#141415',
+    icon: <TipsAndUpdatesIcon />,
+    label: '資格',
+  },
+  life: {
+    color: '#e7a949',
+    icon: <Diversity1Icon />,
+    label: '生活',
+  },
+  hobby: {
+    color: '#69b981',
+    icon: <InsertEmoticonIcon />,
+    label: '趣味',
+  },
+  important: {
+    color: '#f44336',
+    icon: <CampaignIcon />,
+    label: '重要',
   },
 }
 
-const downloadFormatItems: Array<{
-  key: string
-  label: string
-}> = [
+const downloadFormatItems: DownloadFormat = [
   {
     key: 'pdf',
     label: 'PDF',
@@ -71,7 +87,6 @@ export default function Home(): JSX.Element {
   }
 
   const download = (key: string) => {
-    const downloader: Downloader = new Downloader()
     const targetElement: HTMLElement | null = document.getElementById(
       'target-download-component-id',
     )
@@ -106,7 +121,7 @@ export default function Home(): JSX.Element {
       <div className='flex justify-end space-x-1'>
         <Dropdown backdrop='blur'>
           <DropdownTrigger>
-            <Button isIconOnly color='primary' aria-label='Download'>
+            <Button isIconOnly aria-label='Download'>
               <DownloadIcon />
             </Button>
           </DropdownTrigger>
@@ -115,23 +130,28 @@ export default function Home(): JSX.Element {
             items={downloadFormatItems}
             onAction={(key) => download(key as string)}
           >
-            {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
+            {(item) => (
+              <DropdownItem key={item.key} startContent={<ImageIcon />}>
+                {item.label}
+              </DropdownItem>
+            )}
           </DropdownMenu>
         </Dropdown>
         <Link href='/profile/new'>
-          <Tooltip content='イベントを登録する'>
-            <Button isIconOnly color='primary' aria-label='Add'>
+          <Button isIconOnly aria-label='Add'>
+            <Tooltip content='イベントを登録する'>
               <AddIcon />
-            </Button>
-          </Tooltip>
+            </Tooltip>
+          </Button>
         </Link>
       </div>
 
       <div id='target-download-component-id'>
         {items.length > 0 && (
-          <VerticalTimeline lineColor=''>
+          <VerticalTimeline lineColor='#45659c'>
             {items.map((item, index) => {
               const className: string = `vertical-timeline-element--${item.type}`
+              const label: string = timelineItemMap[item.type].label
               const color: string = timelineItemMap[item.type].color
               const icon = timelineItemMap[item.type].icon
 
@@ -139,11 +159,19 @@ export default function Home(): JSX.Element {
                 <VerticalTimelineElement
                   visible={true}
                   className={className}
-                  contentStyle={{ background: color, color: '#222' }}
-                  contentArrowStyle={{ borderRight: `7px solid ${color}` }}
+                  contentStyle={{
+                    background: '#aecff3',
+                    cursor: 'pointer',
+                    color: '#45659c',
+                  }}
+                  contentArrowStyle={{ borderRight: `7px solid #aecff3` }}
                   date={item.date}
-                  iconStyle={{ background: color, color: '#222' }}
-                  icon={icon}
+                  iconStyle={{
+                    border: `2px solid ${color}`,
+                    background: '#fefefd',
+                    color: color,
+                  }}
+                  icon={<Tooltip content={label}>{icon}</Tooltip>}
                   key={index}
                   onTimelineElementClick={() => {
                     redirectEdit(item.id)

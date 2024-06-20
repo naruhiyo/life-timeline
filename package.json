@@ -20,6 +20,7 @@
     "dom-to-image": "^2.6.0",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",
+    "next-themes": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-vertical-timeline-component": "^3.6.0"
