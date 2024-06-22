@@ -96,4 +96,22 @@ describe('Download screen', () => {
       expect(downloaderMock).toHaveBeenCalled()
     })
   })
+
+  it('Download png when the `PDF` clicked.', async () => {
+    const user = userEvent.setup()
+
+    render(<Home />)
+
+    const downloaderMock = await jest
+      .spyOn(Downloader.prototype, 'download')
+      .mockReturnValue(Promise.resolve(true))
+    act(async () => {
+      // download png
+      user.click(await screen.findByTestId('DownloadIcon'))
+      user.click(await screen.findByRole('menuitem', { name: 'PDF' }))
+      await select(await screen.findByRole('menu'), 'PDF')
+
+      expect(downloaderMock).toHaveBeenCalled()
+    })
+  })
 })
