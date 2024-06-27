@@ -25,6 +25,7 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import { DBLogic } from '@/api/DBLogic'
 import { Downloader } from '@/api/Downloader'
 import { LifeTimelineEventLogic } from '@/api/LifeTimelineEventLogic'
+import pageStyle from '@/components/page.module.css'
 import { DownloadFormat, LifeTimelineEvent, VerticalTimelineMap } from '@/types/LifeTimelineEvent'
 
 const timelineItemMap: VerticalTimelineMap = {
@@ -178,7 +179,7 @@ export default function Home(): JSX.Element {
                   }}
                 >
                   <h3 className='vertical-timeline-element-title'>{item.title}</h3>
-                  <p>{item.content}</p>
+                  <p className={pageStyle.whitespacePrewrap}>{item.content}</p>
                 </VerticalTimelineElement>
               )
             })}
