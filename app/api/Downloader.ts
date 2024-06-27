@@ -12,7 +12,7 @@ export class Downloader {
    */
   async download(targetElement: HTMLElement, format: string): Promise<boolean> {
     let downloadElement: HTMLAnchorElement
-    const bgColor: string = '#ffffff'
+    const bgColor: string = '#f7f6ea'
     switch (format) {
       case 'svg':
         downloadElement = document.createElement('a')
@@ -38,7 +38,6 @@ export class Downloader {
         if (typeof window !== 'undefined') {
           const html2pdf = (await import('html2pdf.js')).default
           downloadElement = document.createElement('a')
-          bgColor = window.getComputedStyle(document.body).backgroundColor
           const svgUri = await domtoimage.toSvg(targetElement, {
             width: targetElement.clientWidth,
             height: targetElement.clientHeight,
