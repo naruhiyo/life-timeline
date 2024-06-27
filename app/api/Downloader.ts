@@ -1,3 +1,4 @@
+'use client'
 import domtoimage from 'dom-to-image'
 
 export class Downloader {
@@ -22,6 +23,7 @@ export class Downloader {
           bgcolor: bgColor,
         })
         downloadElement.download = `${this.fileName}.svg`
+        downloadElement.click()
         break
       case 'png':
         downloadElement = document.createElement('a')
@@ -30,15 +32,47 @@ export class Downloader {
           height: targetElement.clientHeight,
         })
         downloadElement.download = `${this.fileName}.png`
+        downloadElement.click()
         break
       case 'pdf':
-        console.log('pdf will be supported in the future')
-        return false
+        if (typeof window !== 'undefined') {
+          const html2pdf = (await import('html2pdf.js')).default
+          downloadElement = document.createElement('a')
+          bgColor = window.getComputedStyle(document.body).backgroundColor
+          const svgUri = await domtoimage.toSvg(targetElement, {
+            width: targetElement.clientWidth,
+            height: targetElement.clientHeight,
+            bgcolor: bgColor,
+          })
+
+          const svgRegex = /<svg[\s\S].*<\/svg>/
+          const match = svgUri.match(svgRegex)
+          if (!match) {
+            console.error('Content to export is not found.')
+            return false
+          }
+          const svg = match[0]
+
+          const fileName = `${this.fileName}.pdf`
+
+          const opt = {
+            filename: fileName,
+          }
+
+          if (typeof self !== 'undefined') {
+            const blob = await html2pdf().set(opt).from(svg).output('blob')
+            const pdfUrl = URL.createObjectURL(blob)
+            downloadElement.href = pdfUrl
+            downloadElement.download = fileName
+            downloadElement.click()
+            URL.revokeObjectURL(pdfUrl)
+          }
+        }
+        break
       default:
         console.error(`Invalid download format. ${format}`)
         return false
     }
-    downloadElement.click()
     return true
   }
 }
