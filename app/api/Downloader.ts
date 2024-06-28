@@ -11,6 +11,40 @@ export class Downloader {
     })
   }
 
+  private updateSvgScale(svgString: string, scaleFactor: number): string {
+    const svgTagMatch = svgString.match(/<svg[^>]*>/)
+    if (!svgTagMatch) {
+      throw new Error('Could not find svg tag')
+    }
+    const svgTag = svgTagMatch[0]
+    const viewBoxMatch = svgTag.match(/viewBox="([^"]*)"/)
+
+    if (viewBoxMatch) {
+      const viewBox = viewBoxMatch[1]
+      const [minX, minY, width, height] = viewBox.split(' ').map(Number)
+      const newWidth = width / scaleFactor
+      const newHeight = height / scaleFactor
+      const newViewBox = `${minX} ${minY} ${newWidth} ${newHeight}`
+      return svgString.replace(viewBox, newViewBox)
+    } else {
+      const widthMatch = svgTag.match(/width="([^"]*)"/)
+      const heightMatch = svgTag.match(/height="([^"]*)"/)
+
+      if (!widthMatch || !heightMatch) {
+        throw new Error('Could not find width, height in svg')
+      }
+
+      const width = parseFloat(widthMatch[1])
+      const height = parseFloat(heightMatch[1])
+
+      const newWidth = width / scaleFactor
+      const newHeight = height / scaleFactor
+      const newViewBox = `viewBox="0 0 ${newWidth} ${newHeight}"`
+
+      return svgString.replace(svgTag, svgTag.replace(/>$/, ` ${newViewBox}>`))
+    }
+  }
+
   /**
    * Downloads a file specified with the format
    * @param targetElement The HTML element to download.
@@ -59,6 +93,9 @@ export class Downloader {
           }
           const svgWithoutNewLine = match[0]
           const svg = this.replaceEncodedNewlines(svgWithoutNewLine)
+          // 794px is A4 width
+          const scale = targetElement.offsetWidth > 794 ? 794 / targetElement.offsetWidth : 1
+          const ScaledSvg = this.updateSvgScale(svg, scale)
 
           const fileName = `${this.fileName}.pdf`
 
@@ -67,7 +104,7 @@ export class Downloader {
           }
 
           if (typeof self !== 'undefined') {
-            const blob = await html2pdf().set(opt).from(svg).output('blob')
+            const blob = await html2pdf().set(opt).from(ScaledSvg).output('blob')
             const pdfUrl = URL.createObjectURL(blob)
             downloadElement.href = pdfUrl
             downloadElement.download = fileName
