@@ -51,7 +51,14 @@ export class Downloader {
             console.error('Content to export is not found.')
             return false
           }
-          const svg = match[0]
+          const svgWithoutNewLine = match[0]
+          const replaceEncodedNewlines = (input: string): string => {
+            return input.replace(/<p([^>]*)>(.*?)<\/p>/g, (match, p1, p2) => {
+              const replacedContent = p2.replace(/%0A/g, '\n')
+              return `<p${p1}>${replacedContent}</p>`
+            })
+          }
+          const svg = replaceEncodedNewlines(svgWithoutNewLine)
 
           const fileName = `${this.fileName}.pdf`
 
