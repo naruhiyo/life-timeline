@@ -4,6 +4,13 @@ import domtoimage from 'dom-to-image'
 export class Downloader {
   private readonly fileName: string = 'life-timeline'
 
+  private replaceEncodedNewlines(input: string): string {
+    return input.replace(/<p([^>]*)>(.*?)<\/p>/g, (match, p1, p2) => {
+      const replacedContent = p2.replace(/%0A/g, '\n')
+      return `<p${p1}>${replacedContent}</p>`
+    })
+  }
+
   /**
    * Downloads a file specified with the format
    * @param targetElement The HTML element to download.
@@ -52,13 +59,7 @@ export class Downloader {
             return false
           }
           const svgWithoutNewLine = match[0]
-          const replaceEncodedNewlines = (input: string): string => {
-            return input.replace(/<p([^>]*)>(.*?)<\/p>/g, (match, p1, p2) => {
-              const replacedContent = p2.replace(/%0A/g, '\n')
-              return `<p${p1}>${replacedContent}</p>`
-            })
-          }
-          const svg = replaceEncodedNewlines(svgWithoutNewLine)
+          const svg = this.replaceEncodedNewlines(svgWithoutNewLine)
 
           const fileName = `${this.fileName}.pdf`
 
